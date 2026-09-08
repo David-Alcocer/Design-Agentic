@@ -514,43 +514,38 @@ function CourseSelector({ onClose }) {
   const specific    = COURSES.filter(c => c.type === 'specific');
 
   return (
-    <motion.div
-      key="selector"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.18 }}
-      style={{
-        position: 'fixed', inset: 0, zIndex: 200,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        padding: '16px',
-      }}
-    >
-      {/* Backdrop */}
-      <div
-        style={{ position: 'absolute', inset: 0, background: 'rgba(3,10,26,0.8)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }}
+    <>
+      {/* Backdrop — fade independiente, sin blur para no revelar el fondo azul */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        style={{ position: 'fixed', inset: 0, zIndex: 199, background: 'rgba(3,10,26,0.82)' }}
         onClick={onClose}
       />
 
+      {/* Modal card — animación propia, sin depender del backdrop */}
       <motion.div
-        initial={{ opacity: 0, y: 12, scale: 0.98 }}
+        initial={{ opacity: 0, y: 14, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 8, scale: 0.98 }}
-        transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
         style={{
-          position: 'relative', zIndex: 1,
-          width: '100%', maxWidth: selected ? 600 : 700,
+          position: 'fixed',
+          top: '50%', left: '50%',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 200,
+          width: 'calc(100% - 32px)',
+          maxWidth: selected ? 600 : 700,
           maxHeight: '88vh',
-          background: 'rgba(6,12,32,0.96)',
-          backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
+          background: '#060c20',
           border: '1px solid rgba(255,255,255,0.08)',
           borderRadius: 18,
           overflow: 'hidden',
-          boxShadow: '0 32px 80px rgba(0,0,0,0.65)',
+          boxShadow: '0 24px 64px rgba(0,0,0,0.7)',
           display: 'flex', flexDirection: 'column',
         }}
-        layout
-        transition={{ layout: { duration: 0.28, ease: [0.16, 1, 0.3, 1] } }}
       >
         {/* Modal header */}
         <div style={{
@@ -661,13 +656,13 @@ function CourseSelector({ onClose }) {
               <p style={{ color: 'white', fontSize: 13, fontWeight: 600, marginBottom: 2 }}>¿Listo para el EXANI-II?</p>
               <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12 }}>Accede a todos los módulos y seguimiento personalizado.</p>
             </div>
-            <button onClick={onClose} className="btn-gold" style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '10px 20px', fontSize: 13, flexShrink: 0 }}>
-              <Rocket size={14} /> Crear cuenta gratis
+            <button onClick={onClose} className="btn-gold" style={{ padding: '10px 20px', fontSize: 13, flexShrink: 0 }}>
+              Crear cuenta gratis
             </button>
           </div>
         )}
       </motion.div>
-    </motion.div>
+    </>
   );
 }
 
