@@ -59,8 +59,8 @@ export default function Sidebar({ activeSection, setActiveSection, isOpen, onClo
         height: '100vh',
         display: 'flex',
         flexDirection: 'column',
-        background: 'linear-gradient(180deg, #060f28 0%, #050d22 100%)',
-        borderRight: '1px solid rgba(255,255,255,0.06)',
+        background: '#04091f',
+        borderRight: '1px solid rgba(255,255,255,0.05)',
         position: isMobile ? 'fixed' : 'relative',
         top: 0,
         left: 0,
@@ -68,10 +68,10 @@ export default function Sidebar({ activeSection, setActiveSection, isOpen, onClo
         flexShrink: 0,
       }}
     >
-      {/* Subtle top glow */}
+      {/* Top accent line */}
       <div style={{
-        position: 'absolute', top: 0, left: '20%', right: '20%', height: 1,
-        background: 'linear-gradient(90deg, transparent, rgba(245,200,66,0.3), transparent)',
+        position: 'absolute', top: 0, left: 0, right: 0, height: 1,
+        background: 'linear-gradient(90deg, transparent 0%, rgba(245,200,66,0.18) 50%, transparent 100%)',
         pointerEvents: 'none',
       }} />
 
@@ -114,30 +114,24 @@ export default function Sidebar({ activeSection, setActiveSection, isOpen, onClo
       </div>
 
       {/* User */}
-      <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+      <div style={{ padding: '14px 20px 16px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
           <div style={{
-            width: 38, height: 38, borderRadius: '50%',
-            background: 'linear-gradient(135deg, #1e3a6e 0%, #0c1d45 100%)',
+            width: 32, height: 32, borderRadius: '50%',
+            background: 'rgba(255,255,255,0.06)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 13, fontWeight: 700, color: 'white',
-            border: `2px solid ${badge.border}`,
+            fontSize: 12, fontWeight: 600, color: 'rgba(255,255,255,0.7)',
             flexShrink: 0,
           }}>
             {user.avatar}
           </div>
           <div style={{ minWidth: 0 }}>
-            <p style={{ color: 'rgba(255,255,255,0.88)', fontSize: 13, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: 12.5, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {user.name.split(' ').slice(0, 2).join(' ')}
             </p>
-            <span style={{
-              display: 'inline-block', marginTop: 2,
-              background: badge.bg, color: badge.color,
-              border: `1px solid ${badge.border}`,
-              borderRadius: 999, padding: '1px 8px', fontSize: 10, fontWeight: 600,
-            }}>
+            <p style={{ color: 'rgba(255,255,255,0.28)', fontSize: 11, marginTop: 1 }}>
               {roleLabel[user.role]}
-            </span>
+            </p>
           </div>
         </div>
       </div>
@@ -159,29 +153,6 @@ export default function Sidebar({ activeSection, setActiveSection, isOpen, onClo
           );
         })}
       </nav>
-
-      {/* Solar system decorative strip */}
-      <div style={{
-        margin: '8px 12px',
-        height: 52,
-        borderRadius: 10,
-        overflow: 'hidden',
-        position: 'relative',
-        border: '1px solid rgba(255,255,255,0.05)',
-        flexShrink: 0,
-      }}>
-        <div style={{
-          position: 'absolute', inset: 0,
-          backgroundImage: `url(${import.meta.env.BASE_URL}51581-solar-system-439046_1920.jpg)`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center 45%',
-          opacity: 0.28,
-        }} />
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: 'linear-gradient(to right, rgba(6,15,40,0.7) 0%, transparent 40%, transparent 60%, rgba(6,15,40,0.7) 100%)',
-        }} />
-      </div>
 
       {/* Logout */}
       <div style={{ padding: '12px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>

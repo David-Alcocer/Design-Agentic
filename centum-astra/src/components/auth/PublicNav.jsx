@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, ChevronRight, ChevronLeft, X, Clock, CheckCircle, XCircle, Lightbulb, Rocket } from 'lucide-react';
+import { ChevronDown, ChevronRight, ChevronLeft, X, Clock, CheckCircle, XCircle, Lightbulb } from 'lucide-react';
 
 /* ── Mock data ──────────────────────────────────────────── */
 const COURSES = [
@@ -516,36 +516,41 @@ function CourseSelector({ onClose }) {
   return (
     <motion.div
       key="selector"
-      initial={{ opacity: 0, scale: 0.97, y: -8 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.97, y: -8 }}
-      transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.18 }}
       style={{
         position: 'fixed', inset: 0, zIndex: 200,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         padding: '16px',
       }}
-      onClick={e => { if (e.target === e.currentTarget) onClose(); }}
     >
       {/* Backdrop */}
-      <div style={{ position: 'absolute', inset: 0, background: 'rgba(3,10,26,0.75)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }} onClick={onClose} />
+      <div
+        style={{ position: 'absolute', inset: 0, background: 'rgba(3,10,26,0.8)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }}
+        onClick={onClose}
+      />
 
       <motion.div
+        initial={{ opacity: 0, y: 12, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 8, scale: 0.98 }}
+        transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
         style={{
           position: 'relative', zIndex: 1,
-          width: '100%', maxWidth: selected ? 620 : 720,
-          maxHeight: '90vh',
-          background: 'linear-gradient(145deg, rgba(10,22,58,0.96) 0%, rgba(6,15,40,0.98) 100%)',
-          backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
-          border: '1px solid rgba(255,255,255,0.1)',
-          borderTop: '1px solid rgba(255,255,255,0.16)',
-          borderRadius: 20,
+          width: '100%', maxWidth: selected ? 600 : 700,
+          maxHeight: '88vh',
+          background: 'rgba(6,12,32,0.96)',
+          backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
+          border: '1px solid rgba(255,255,255,0.08)',
+          borderRadius: 18,
           overflow: 'hidden',
-          boxShadow: '0 24px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.04)',
+          boxShadow: '0 32px 80px rgba(0,0,0,0.65)',
           display: 'flex', flexDirection: 'column',
         }}
         layout
-        transition={{ layout: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } }}
+        transition={{ layout: { duration: 0.28, ease: [0.16, 1, 0.3, 1] } }}
       >
         {/* Modal header */}
         <div style={{
@@ -672,22 +677,26 @@ function CourseCard({ course, index, onSelect }) {
 
   return (
     <motion.button
-      initial={{ opacity: 0, y: 12 }}
+      initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.06, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-      whileHover={{ y: -3, boxShadow: isMed
-        ? '0 12px 32px rgba(0,0,0,0.5), 0 0 20px rgba(29,233,182,0.14)'
-        : '0 12px 32px rgba(0,0,0,0.5), 0 0 20px rgba(245,200,66,0.1)',
-      }}
+      transition={{ delay: index * 0.05, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+      whileHover={{ y: -2 }}
       onClick={onSelect}
       style={{
-        display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 10,
-        padding: '16px', borderRadius: 14, cursor: 'pointer', textAlign: 'left',
-        background: isMed
-          ? 'linear-gradient(145deg, rgba(4,30,27,0.7) 0%, rgba(2,14,12,0.5) 100%)'
-          : 'linear-gradient(145deg, rgba(22,40,80,0.5) 0%, rgba(12,29,69,0.35) 100%)',
-        border: `1px solid ${course.border}`,
+        display: 'flex', flexDirection: 'column', alignItems: 'flex-start',
+        padding: '18px 16px 14px', borderRadius: 12, cursor: 'pointer', textAlign: 'left',
+        background: isMed ? 'rgba(29,233,182,0.04)' : 'rgba(255,255,255,0.03)',
+        border: `1px solid ${isMed ? 'rgba(29,233,182,0.1)' : 'rgba(255,255,255,0.06)'}`,
+        transition: 'border-color 0.18s ease, background 0.18s ease',
         position: 'relative', overflow: 'hidden',
+      }}
+      onMouseEnter={e => {
+        e.currentTarget.style.borderColor = isMed ? 'rgba(29,233,182,0.22)' : 'rgba(255,255,255,0.12)';
+        e.currentTarget.style.background  = isMed ? 'rgba(29,233,182,0.06)' : 'rgba(255,255,255,0.05)';
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.borderColor = isMed ? 'rgba(29,233,182,0.1)' : 'rgba(255,255,255,0.06)';
+        e.currentTarget.style.background  = isMed ? 'rgba(29,233,182,0.04)' : 'rgba(255,255,255,0.03)';
       }}
     >
       {isMed && (
@@ -695,33 +704,25 @@ function CourseCard({ course, index, onSelect }) {
           position: 'absolute', inset: 0, zIndex: 0,
           backgroundImage: `url(${import.meta.env.BASE_URL}fernandozhiminaicela-face-mask-5042631_1920.jpg)`,
           backgroundSize: 'cover', backgroundPosition: 'center 35%',
-          opacity: 0.05, borderRadius: 14,
+          opacity: 0.04,
         }} />
       )}
       <div style={{ position: 'relative', zIndex: 1, width: '100%' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-          <span style={{ fontSize: 22 }}>{course.icon}</span>
-          <span style={{
-            fontSize: 9.5, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase',
-            padding: '2px 8px', borderRadius: 4,
-            background: isMed ? 'rgba(29,233,182,0.1)' : 'rgba(255,255,255,0.05)',
-            color: isMed ? '#5eead4' : 'rgba(255,255,255,0.35)',
-            border: `1px solid ${isMed ? 'rgba(29,233,182,0.18)' : 'rgba(255,255,255,0.07)'}`,
-          }}>
-            {isMed ? 'Específico' : 'Transversal'}
-          </span>
-        </div>
-        <p style={{ color: isMed ? '#e0faf6' : 'rgba(255,255,255,0.92)', fontSize: 13, fontWeight: 700, marginBottom: 4, lineHeight: 1.35 }}>
+        <div style={{ fontSize: 20, marginBottom: 12 }}>{course.icon}</div>
+        <p style={{
+          color: isMed ? 'rgba(224,250,246,0.9)' : 'rgba(255,255,255,0.88)',
+          fontSize: 13.5, fontWeight: 600, marginBottom: 5, lineHeight: 1.35,
+        }}>
           {course.label}
         </p>
-        <p style={{ color: isMed ? 'rgba(29,233,182,0.6)' : 'rgba(255,255,255,0.42)', fontSize: 11.5, lineHeight: 1.45 }}>
+        <p style={{ color: isMed ? 'rgba(29,233,182,0.5)' : 'rgba(255,255,255,0.36)', fontSize: 12, lineHeight: 1.5 }}>
           {course.desc}
         </p>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 12 }}>
-          <span style={{ fontSize: 11, color: isMed ? 'rgba(29,233,182,0.55)' : 'rgba(245,200,66,0.6)', fontWeight: 600 }}>
-            Probar gratis
+        <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 14 }}>
+          <span style={{ fontSize: 11.5, color: isMed ? 'rgba(29,233,182,0.6)' : 'rgba(245,200,66,0.65)', fontWeight: 500 }}>
+            Probar ahora
           </span>
-          <ChevronRight size={12} style={{ color: isMed ? 'rgba(29,233,182,0.55)' : 'rgba(245,200,66,0.6)' }} />
+          <ChevronRight size={11} style={{ color: isMed ? 'rgba(29,233,182,0.5)' : 'rgba(245,200,66,0.5)' }} />
         </div>
       </div>
     </motion.button>
@@ -730,25 +731,13 @@ function CourseCard({ course, index, onSelect }) {
 
 /* ── Public NavBar ──────────────────────────────────────── */
 export default function PublicNav() {
-  const [selectorOpen,  setSelectorOpen]  = useState(false);
-  const [coursesOpen,   setCoursesOpen]   = useState(false);
-  const [scrolled,      setScrolled]      = useState(false);
-  const dropdownRef = useRef(null);
+  const [selectorOpen, setSelectorOpen] = useState(false);
+  const [scrolled,     setScrolled]     = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 10);
+    const onScroll = () => setScrolled(window.scrollY > 8);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  useEffect(() => {
-    function handleOutside(e) {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setCoursesOpen(false);
-      }
-    }
-    document.addEventListener('mousedown', handleOutside);
-    return () => document.removeEventListener('mousedown', handleOutside);
   }, []);
 
   return (
@@ -790,116 +779,32 @@ export default function PublicNav() {
           </div>
         </div>
 
-        {/* Nav items */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          {/* Cursos dropdown */}
-          <div style={{ position: 'relative' }} ref={dropdownRef}>
-            <button
-              onClick={() => setCoursesOpen(o => !o)}
-              style={{
-                display: 'flex', alignItems: 'center', gap: 5,
-                padding: '7px 14px', borderRadius: 8,
-                background: coursesOpen ? 'rgba(255,255,255,0.08)' : 'transparent',
-                border: '1px solid transparent',
-                color: coursesOpen ? 'white' : 'rgba(255,255,255,0.65)',
-                fontSize: 13.5, fontWeight: 500, cursor: 'pointer',
-                transition: 'color 0.15s ease, background 0.15s ease',
-              }}
-              onMouseEnter={e => { if (!coursesOpen) { e.currentTarget.style.color = 'white'; e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; } }}
-              onMouseLeave={e => { if (!coursesOpen) { e.currentTarget.style.color = 'rgba(255,255,255,0.65)'; e.currentTarget.style.background = 'transparent'; } }}
-            >
-              Cursos
-              <motion.span animate={{ rotate: coursesOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
-                <ChevronDown size={14} />
-              </motion.span>
-            </button>
-
-            <AnimatePresence>
-              {coursesOpen && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.96, y: -6 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.96, y: -6 }}
-                  transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-                  style={{
-                    position: 'absolute', top: 'calc(100% + 8px)', right: 0,
-                    width: 260,
-                    background: 'linear-gradient(145deg, rgba(10,22,58,0.98) 0%, rgba(6,15,40,0.99) 100%)',
-                    backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
-                    border: '1px solid rgba(255,255,255,0.1)',
-                    borderTop: '1px solid rgba(255,255,255,0.15)',
-                    borderRadius: 14,
-                    padding: '8px',
-                    boxShadow: '0 16px 48px rgba(0,0,0,0.6)',
-                    transformOrigin: 'top right',
-                  }}
-                >
-                  <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', color: 'rgba(255,255,255,0.28)', textTransform: 'uppercase', padding: '6px 10px 8px' }}>
-                    Transversales
-                  </p>
-                  {COURSES.filter(c => c.type === 'transversal').map(c => (
-                    <button
-                      key={c.id}
-                      onClick={() => { setCoursesOpen(false); setSelectorOpen(true); }}
-                      style={{
-                        display: 'flex', alignItems: 'center', gap: 10,
-                        width: '100%', padding: '9px 10px', borderRadius: 8,
-                        background: 'transparent', border: 'none', cursor: 'pointer',
-                        transition: 'background 0.12s ease',
-                      }}
-                      onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
-                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                    >
-                      <span style={{ fontSize: 15 }}>{c.icon}</span>
-                      <div style={{ textAlign: 'left' }}>
-                        <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 12.5, fontWeight: 500, marginBottom: 1 }}>{c.label}</p>
-                        <p style={{ color: 'rgba(255,255,255,0.32)', fontSize: 11 }}>{c.desc}</p>
-                      </div>
-                    </button>
-                  ))}
-
-                  <div style={{ height: 1, background: 'rgba(29,233,182,0.1)', margin: '8px 0' }} />
-
-                  <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', color: 'rgba(29,233,182,0.45)', textTransform: 'uppercase', padding: '4px 10px 6px' }}>
-                    Específicos
-                  </p>
-                  {COURSES.filter(c => c.type === 'specific').map(c => (
-                    <button
-                      key={c.id}
-                      onClick={() => { setCoursesOpen(false); setSelectorOpen(true); }}
-                      style={{
-                        display: 'flex', alignItems: 'center', gap: 10,
-                        width: '100%', padding: '9px 10px', borderRadius: 8,
-                        background: 'transparent', border: 'none', cursor: 'pointer',
-                        transition: 'background 0.12s ease',
-                      }}
-                      onMouseEnter={e => e.currentTarget.style.background = 'rgba(29,233,182,0.05)'}
-                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                    >
-                      <span style={{ fontSize: 15 }}>{c.icon}</span>
-                      <div style={{ textAlign: 'left' }}>
-                        <p style={{ color: 'rgba(224,250,246,0.9)', fontSize: 12.5, fontWeight: 500, marginBottom: 1 }}>{c.label}</p>
-                        <p style={{ color: 'rgba(29,233,182,0.45)', fontSize: 11 }}>{c.desc}</p>
-                      </div>
-                    </button>
-                  ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          {/* Prueba Gratis CTA */}
-          <motion.button
-            whileHover={{ y: -1 }}
-            whileTap={{ scale: 0.97 }}
-            onClick={() => { setCoursesOpen(false); setSelectorOpen(true); }}
-            className="btn-fill"
-            style={{ padding: '8px 18px', fontSize: 13, fontWeight: 700, letterSpacing: '0.04em', display: 'flex', alignItems: 'center', gap: 6 }}
-          >
-            <Rocket size={13} />
-            <span className="nav-cta-label">Prueba Gratis</span>
-          </motion.button>
-        </div>
+        {/* Cursos — abre el selector directamente */}
+        <button
+          onClick={() => setSelectorOpen(true)}
+          style={{
+            display: 'flex', alignItems: 'center', gap: 6,
+            padding: '7px 16px', borderRadius: 8,
+            background: 'transparent',
+            border: '1px solid rgba(255,255,255,0.1)',
+            color: 'rgba(255,255,255,0.7)',
+            fontSize: 13.5, fontWeight: 500, cursor: 'pointer',
+            transition: 'color 0.15s ease, background 0.15s ease, border-color 0.15s ease',
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.color = 'white';
+            e.currentTarget.style.background = 'rgba(255,255,255,0.06)';
+            e.currentTarget.style.borderColor = 'rgba(255,255,255,0.18)';
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.color = 'rgba(255,255,255,0.7)';
+            e.currentTarget.style.background = 'transparent';
+            e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)';
+          }}
+        >
+          Cursos
+          <ChevronDown size={13} style={{ opacity: 0.6 }} />
+        </button>
       </motion.nav>
 
       {/* Course selector modal */}

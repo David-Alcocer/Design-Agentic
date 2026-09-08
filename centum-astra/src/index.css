@@ -38,57 +38,54 @@
 
   /* ── Glass surfaces ─────────────────────────────── */
   .glass {
-    background: linear-gradient(145deg, rgba(22,40,80,0.55) 0%, rgba(12,29,69,0.38) 100%);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-top-color: rgba(255,255,255,0.12);
-    box-shadow: 0 4px 24px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06);
-    border-radius: 16px;
+    background: rgba(255,255,255,0.03);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.35);
+    border-radius: 14px;
     transition: box-shadow 0.22s ease, border-color 0.22s ease;
   }
 
   @media (hover: hover) {
   .glass:hover {
-    box-shadow: 0 8px 36px rgba(0,0,0,0.6), 0 0 20px rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.09);
-    border-color: rgba(255,255,255,0.11);
+    box-shadow: 0 6px 28px rgba(0,0,0,0.45);
+    border-color: rgba(255,255,255,0.1);
   }
   }
 
   .glass-gold {
-    background: linear-gradient(145deg, rgba(30,30,10,0.55) 0%, rgba(20,20,5,0.38) 100%);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(245,200,66,0.18);
-    border-top-color: rgba(245,200,66,0.28);
-    box-shadow: 0 4px 24px rgba(0,0,0,0.5), inset 0 1px 0 rgba(245,200,66,0.08), 0 0 32px rgba(245,200,66,0.06);
-    border-radius: 16px;
+    background: rgba(245,200,66,0.03);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(245,200,66,0.12);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.35), 0 0 24px rgba(245,200,66,0.04);
+    border-radius: 14px;
     transition: box-shadow 0.22s ease, border-color 0.22s ease;
   }
 
   @media (hover: hover) {
   .glass-gold:hover {
-    box-shadow: 0 8px 36px rgba(0,0,0,0.55), 0 0 32px rgba(245,200,66,0.12), inset 0 1px 0 rgba(245,200,66,0.12);
-    border-color: rgba(245,200,66,0.28);
+    box-shadow: 0 6px 28px rgba(0,0,0,0.45), 0 0 24px rgba(245,200,66,0.08);
+    border-color: rgba(245,200,66,0.2);
   }
   }
 
-  /* Medical variant — "clean room" feel */
+  /* Medical variant */
   .glass-clinical {
-    background: linear-gradient(145deg, rgba(4,30,27,0.75) 0%, rgba(2,14,12,0.55) 100%);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(29,233,182,0.14);
-    border-top-color: rgba(29,233,182,0.22);
-    box-shadow: 0 4px 24px rgba(0,0,0,0.55), inset 0 1px 0 rgba(29,233,182,0.07), 0 0 24px rgba(29,233,182,0.04);
-    border-radius: 16px;
+    background: rgba(29,233,182,0.03);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(29,233,182,0.1);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.35), 0 0 20px rgba(29,233,182,0.03);
+    border-radius: 14px;
     transition: box-shadow 0.22s ease, border-color 0.22s ease;
   }
 
   @media (hover: hover) {
   .glass-clinical:hover {
-    box-shadow: 0 8px 36px rgba(0,0,0,0.6), 0 0 28px rgba(29,233,182,0.1), inset 0 1px 0 rgba(29,233,182,0.1);
-    border-color: rgba(29,233,182,0.22);
+    box-shadow: 0 6px 28px rgba(0,0,0,0.45), 0 0 24px rgba(29,233,182,0.07);
+    border-color: rgba(29,233,182,0.18);
   }
   }
 
@@ -231,14 +228,14 @@
   .nav-link {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 9px 14px;
-    border-radius: 10px;
-    color: rgba(255,255,255,0.45);
-    font-size: 13.5px;
-    font-weight: 500;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    color: rgba(255,255,255,0.38);
+    font-size: 13px;
+    font-weight: 450;
     cursor: pointer;
-    transition: color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+    transition: color 0.15s ease, background 0.15s ease;
     position: relative;
     border: 1px solid transparent;
     width: 100%;
@@ -248,27 +245,26 @@
 
   @media (hover: hover) {
   .nav-link:hover {
-    color: rgba(255,255,255,0.88);
-    background: rgba(255,255,255,0.06);
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+    color: rgba(255,255,255,0.75);
+    background: rgba(255,255,255,0.04);
   }
   }
 
   .nav-link-active {
-    color: #f5c842;
-    background: rgba(245,200,66,0.07);
-    border-color: rgba(245,200,66,0.12);
+    color: rgba(255,255,255,0.9);
+    background: rgba(255,255,255,0.05);
   }
 
   .nav-link-active::before {
     content: '';
     position: absolute;
-    left: -1px;
-    top: 20%;
-    height: 60%;
+    left: 0;
+    top: 25%;
+    height: 50%;
     width: 2px;
-    background: linear-gradient(to bottom, transparent, #f5c842, transparent);
+    background: #f5c842;
     border-radius: 0 2px 2px 0;
+    opacity: 0.9;
   }
 
   /* ── Progress ring glow ─────────────────────────── */
@@ -388,18 +384,18 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 12px 28px;
-  font-size: 14px;
-  font-weight: 700;
+  padding: 11px 24px;
+  font-size: 13.5px;
+  font-weight: 600;
   font-family: 'Inter', sans-serif;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   color: #f5c842;
-  background: rgba(3, 10, 26, 0.9);
-  border: 1.5px solid rgba(245, 200, 66, 0.35);
-  border-radius: 0;
+  background: rgba(3, 10, 26, 0.85);
+  border: 1px solid rgba(245, 200, 66, 0.28);
+  border-radius: 8px;
   cursor: pointer;
   overflow: hidden;
-  transition: color 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.28s ease;
+  transition: color 0.24s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.24s ease;
 }
 .btn-fill::before {
   content: '';
@@ -407,10 +403,9 @@
   inset: 0;
   background: linear-gradient(135deg, #b8880f 0%, #f5c842 50%, #fde68a 100%);
   transform: translateX(-101%);
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: -1;
 }
-/* Only apply fill on devices with real hover (not touch screens) */
 @media (hover: hover) {
   .btn-fill:hover::before { transform: translateX(0); }
   .btn-fill:hover { color: #030a1a; border-color: #f5c842; }
