@@ -3,6 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { mockModules } from '../../data/mockData';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Flame, Target, BookOpen, ChevronRight } from 'lucide-react';
+import { cn } from '../../lib/utils';
 
 /* ── Constellation progress ring ───────────────────────── */
 function ProgressHero({ value }) {
@@ -132,13 +133,12 @@ function ProgressHero({ value }) {
 
 /* ── Module card — space vs clinical treatment ──────────── */
 const SPACE_COLORS = {
-  blue:    { border: 'rgba(59,130,246,0.2)',    bar: 'linear-gradient(90deg,#1d4ed8,#60a5fa)' },
-  purple:  { border: 'rgba(168,85,247,0.2)',   bar: 'linear-gradient(90deg,#7e22ce,#c084fc)' },
-  emerald: { border: 'rgba(52,211,153,0.2)',   bar: 'linear-gradient(90deg,#065f46,#34d399)' },
+  blue:    { bar: 'linear-gradient(90deg,#1d4ed8,#60a5fa)' },
+  purple:  { bar: 'linear-gradient(90deg,#7e22ce,#c084fc)' },
+  emerald: { bar: 'linear-gradient(90deg,#065f46,#34d399)' },
 };
 const CLINICAL_STYLE = {
-  border: 'rgba(29,233,182,0.2)',
-  bar:    'linear-gradient(90deg, #0d9488, #1de9b6, #b2f5e8)',
+  bar: 'linear-gradient(90deg, #0d9488, #1de9b6, #b2f5e8)',
 };
 
 function ModuleCard({ module, index }) {
@@ -150,29 +150,29 @@ function ModuleCard({ module, index }) {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.06, ease: [0.16, 1, 0.3, 1] }}
-      whileHover={{
-        y: -4,
-        boxShadow: isMedical
-          ? '0 12px 36px rgba(0,0,0,0.55), 0 0 24px rgba(29,233,182,0.12), inset 0 1px 0 rgba(29,233,182,0.1)'
-          : '0 12px 36px rgba(0,0,0,0.55), 0 0 24px rgba(245,200,66,0.08), inset 0 1px 0 rgba(255,255,255,0.08)',
-        transition: { duration: 0.22 },
-      }}
-      style={{
-        padding: 18,
-        borderRadius: 14,
-        border: `1px solid ${c.border}`,
-        background: isMedical
-          ? 'linear-gradient(145deg, rgba(4,30,27,0.7) 0%, rgba(2,14,12,0.5) 100%)'
-          : 'linear-gradient(145deg, rgba(22,40,80,0.5) 0%, rgba(12,29,69,0.35) 100%)',
-        backdropFilter: 'blur(12px)',
-        boxShadow: isMedical
-          ? '0 4px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(29,233,182,0.07)'
-          : '0 4px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05)',
-        cursor: 'pointer',
-        position: 'relative',
-        overflow: 'hidden',
-      }}
+      whileHover={{ y: -4 }}
+      className={cn(
+        'group relative overflow-hidden rounded-2xl p-[18px] cursor-pointer',
+        isMedical
+          ? 'bg-[linear-gradient(145deg,rgba(4,30,27,0.7)_0%,rgba(2,14,12,0.5)_100%)] border border-teal-400/20 hover:border-teal-400/45 hover:shadow-card-teal'
+          : 'bg-[linear-gradient(145deg,rgba(22,40,80,0.5)_0%,rgba(12,29,69,0.35)_100%)] border border-white/10 hover:border-yellow-500/30 hover:shadow-card-gold',
+        'backdrop-blur-[12px] transition-colors duration-300',
+      )}
     >
+      {/* Radial hover glow */}
+      {isMedical ? (
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-[radial-gradient(ellipse_at_top_left,rgba(29,233,182,0.09)_0%,transparent_65%)]" />
+      ) : (
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-[radial-gradient(ellipse_at_top_left,rgba(245,200,66,0.07)_0%,transparent_65%)]" />
+      )}
+
+      {/* Top shimmer line */}
+      {isMedical ? (
+        <div className="absolute top-0 left-4 right-4 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-r from-transparent via-teal-400/45 to-transparent" />
+      ) : (
+        <div className="absolute top-0 left-4 right-4 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-r from-transparent via-yellow-500/35 to-transparent" />
+      )}
+
       {/* Stethoscope texture — medical modules only */}
       {isMedical && (
         <div style={{
@@ -184,7 +184,7 @@ function ModuleCard({ module, index }) {
       )}
 
       <div style={{ position: 'relative', zIndex: 1 }}>
-        {/* Icon + badge header (superdesign pattern) */}
+        {/* Icon + badge header */}
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 14 }}>
           <div style={{
             width: 40, height: 40, borderRadius: 10, flexShrink: 0,
@@ -206,7 +206,10 @@ function ModuleCard({ module, index }) {
           </span>
         </div>
 
-        <p style={{ color: isMedical ? '#e0faf6' : 'rgba(255,255,255,0.92)', fontSize: 13, fontWeight: 700, marginBottom: 3, lineHeight: 1.3 }}>
+        <p
+          className="relative font-syne text-[13px] font-bold leading-snug tracking-[-0.01em] mb-1"
+          style={{ color: isMedical ? '#e0faf6' : 'rgba(255,255,255,0.92)' }}
+        >
           {module.title}
         </p>
         <p style={{ color: isMedical ? 'rgba(29,233,182,0.6)' : 'rgba(255,255,255,0.45)', fontSize: 11, marginBottom: 14, letterSpacing: '0.01em' }}>
@@ -258,7 +261,7 @@ export default function StudentDashboard({ setActiveSection }) {
   return (
     <div className="scrollbar-hide resp-padding" style={{ padding: 32, display: 'flex', flexDirection: 'column', gap: 24, overflowY: 'auto', maxHeight: 'calc(100vh - 4rem)', position: 'relative' }}>
 
-      {/* Raw Form background blobs */}
+      {/* Background blobs */}
       <div className="blob blob-gold" style={{ width: '70vw', height: '70vw', top: '-30%', right: '-20%', zIndex: 0, pointerEvents: 'none', position: 'fixed' }} />
       <div className="blob blob-teal"  style={{ width: '50vw', height: '50vw', bottom: '-20%', left: '-10%',  zIndex: 0, pointerEvents: 'none', position: 'fixed' }} />
 
@@ -267,8 +270,8 @@ export default function StudentDashboard({ setActiveSection }) {
         initial={{ opacity: 0, y: -16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="glass-gold"
-        style={{ padding: '28px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, position: 'relative', overflow: 'hidden', zIndex: 1 }}
+        className="group relative overflow-hidden rounded-2xl p-7 flex items-center justify-between flex-wrap gap-4 bg-white/5 backdrop-blur-xl border border-yellow-500/20 hover:border-yellow-500/35 transition-colors duration-300"
+        style={{ zIndex: 1 }}
       >
         {/* Astronaut photo — hidden on mobile */}
         <div className="resp-hide-mobile" style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 200, overflow: 'hidden', pointerEvents: 'none' }}>
@@ -285,9 +288,9 @@ export default function StudentDashboard({ setActiveSection }) {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            style={{ fontFamily: 'Orbitron, sans-serif', fontSize: 22, fontWeight: 800, color: 'white', marginBottom: 6, letterSpacing: '-0.02em' }}
+            className="font-syne text-[22px] font-bold text-white mb-1.5 tracking-[-0.02em]"
           >
-            BIENVENIDO, <span className="text-gradient-gold">{user.name.split(' ')[0].toUpperCase()}</span>
+            Bienvenido, <span className="bg-gradient-to-br from-yellow-200 via-[#f5c842] to-amber-500/80 bg-clip-text text-transparent">{user.name.split(' ')[0]}</span>
           </motion.h2>
           <p style={{ color: 'rgba(255,255,255,0.58)', fontSize: 13.5 }}>
             Estás a <span style={{ color: '#f5c842', fontWeight: 700 }}>{100 - user.progress} puntos</span> de completar tu preparación.
@@ -302,25 +305,27 @@ export default function StudentDashboard({ setActiveSection }) {
         </button>
       </motion.div>
 
-      {/* Raw Form stats row — brutalist typographic drama */}
+      {/* Stats row */}
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="glass"
-        style={{ padding: '20px 28px', display: 'flex', alignItems: 'center', gap: 0, zIndex: 1, flexWrap: 'wrap' }}
+        className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl px-7 py-5 flex items-stretch flex-wrap"
+        style={{ zIndex: 1 }}
       >
         {STATS.map(({ Icon, label, val }, i) => (
-          <div key={label} style={{
-            flex: 1,
-            paddingRight: i < 2 ? 28 : 0,
-            marginRight: i < 2 ? 28 : 0,
-            borderRight: i < 2 ? '1px solid rgba(255,255,255,0.06)' : 'none',
-          }}>
-            <p className="stat-display" style={{ color: '#f5c842' }}>{val}</p>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 6 }}>
-              <Icon size={11} strokeWidth={1.6} style={{ color: 'rgba(255,255,255,0.35)' }} />
-              <p className="stat-label">{label}</p>
+          <div key={label} className="flex items-stretch">
+            {i > 0 && (
+              <div className="w-px bg-white/[0.06] self-stretch mx-7" />
+            )}
+            <div style={{ flex: 1 }}>
+              <p className="font-syne text-[32px] font-bold leading-none tracking-tight mb-1.5 bg-gradient-to-br from-yellow-200 via-[#f5c842] to-amber-500/80 bg-clip-text text-transparent">
+                {val}
+              </p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 6 }}>
+                <Icon size={11} strokeWidth={1.6} style={{ color: 'rgba(255,255,255,0.35)' }} />
+                <p className="text-[11px] font-medium tracking-[0.04em] text-white/30 uppercase">{label}</p>
+              </div>
             </div>
           </div>
         ))}
@@ -329,13 +334,12 @@ export default function StudentDashboard({ setActiveSection }) {
       {/* Progress ring + chart */}
       <div className="resp-grid-ring" style={{ display: 'grid', gridTemplateColumns: '220px 1fr', gap: 16, zIndex: 1 }}>
 
-        {/* Ring */}
+        {/* Ring card */}
         <motion.div
           initial={{ opacity: 0, scale: 0.94 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.15, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="glass"
-          style={{ padding: '24px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}
+          className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 flex flex-col items-center gap-4"
         >
           <div className="section-divider" style={{ width: '100%', marginBottom: 0 }}>
             <h3>Progreso</h3>
@@ -343,13 +347,12 @@ export default function StudentDashboard({ setActiveSection }) {
           <ProgressHero value={user.progress} />
         </motion.div>
 
-        {/* Bar chart */}
+        {/* Bar chart card */}
         <motion.div
           initial={{ opacity: 0, x: 16 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="glass"
-          style={{ padding: '24px 20px' }}
+          className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6"
         >
           <div className="section-divider" style={{ marginBottom: 16 }}>
             <h3>Resultados recientes</h3>

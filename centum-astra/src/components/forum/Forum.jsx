@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { mockForumPosts } from '../../data/mockData';
 import { useAuth } from '../../context/AuthContext';
 import { useBreakpoint } from '../../hooks/useBreakpoint';
+import { cn } from '../../lib/utils';
 
 const subjectColors = {
   'Pensamiento Matemático': 'bg-blue-500/15 text-blue-300 border-blue-500/30',
@@ -17,9 +18,12 @@ function PostCard({ post, onClick, selected }) {
     <motion.div
       whileHover={{ x: 4 }}
       onClick={() => onClick(post)}
-      className={`glass p-5 cursor-pointer transition-all border
+      className={`group relative overflow-hidden bg-white/5 backdrop-blur-xl p-5 cursor-pointer transition-all border
         ${selected ? 'border-amber-400/40 bg-amber-400/5' : 'border-white/8 hover:border-white/20'}`}
     >
+      <div className={cn('absolute inset-0 opacity-0 transition-opacity duration-500 pointer-events-none', selected ? 'opacity-100 bg-[radial-gradient(ellipse_at_top_left,rgba(245,200,66,0.08)_0%,transparent_65%)]' : 'group-hover:opacity-100 bg-[radial-gradient(ellipse_at_top_left,rgba(255,255,255,0.03)_0%,transparent_65%)]')} />
+      <div className={cn('absolute top-0 left-4 right-4 h-px transition-opacity duration-500 pointer-events-none bg-gradient-to-r from-transparent via-yellow-500/35 to-transparent', selected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100')} />
+      <div className="relative">
       <div className="flex items-start justify-between gap-2 mb-2">
         <h3 className="text-white font-semibold text-sm leading-snug flex-1">{post.title}</h3>
         {post.resolved && (
@@ -34,6 +38,7 @@ function PostCard({ post, onClick, selected }) {
         <span>💬 {post.replies.length} {post.replies.length === 1 ? 'respuesta' : 'respuestas'}</span>
         <span>❤️ {post.likes}</span>
         <span>{new Date(post.date).toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })}</span>
+      </div>
       </div>
     </motion.div>
   );
@@ -66,7 +71,7 @@ function PostDetail({ post, onClose, onAddReply, showBack }) {
     <motion.div
       initial={{ opacity: 0, x: 30 }}
       animate={{ opacity: 1, x: 0 }}
-      className="glass flex flex-col h-full overflow-hidden"
+      className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl flex flex-col h-full overflow-hidden"
     >
       {/* Header */}
       <div className="p-6 border-b border-white/8">
@@ -279,7 +284,7 @@ export default function Forum() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="glass p-6 h-full flex flex-col gap-4"
+              className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 h-full flex flex-col gap-4"
             >
               <div className="flex items-center justify-between">
                 {isMobile && (
@@ -340,7 +345,7 @@ export default function Forum() {
               key="empty"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="glass h-full"
+              className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl h-full"
               style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12 }}
             >
               <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'rgba(245,200,66,0.06)', border: '1px solid rgba(245,200,66,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

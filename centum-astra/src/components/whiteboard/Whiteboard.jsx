@@ -31,7 +31,7 @@ function ExportModal({ onClose, onExport }) {
       <motion.div
         initial={{ opacity: 0, scale: 0.94 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="glass"
+        className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl"
         style={{ width: '100%', maxWidth: 380, padding: '28px 24px' }}
       >
         {done ? (
@@ -215,7 +215,7 @@ export default function Whiteboard({ onExportToModule }) {
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center gap-4 px-6 py-3 border-b border-white/8 bg-white/3 backdrop-blur-sm flex-wrap"
+        className="flex items-center gap-4 px-6 py-3 border-b border-white/[0.08] bg-white/[0.03] backdrop-blur-sm flex-wrap"
       >
         {/* Tools */}
         <div className="flex gap-1.5">

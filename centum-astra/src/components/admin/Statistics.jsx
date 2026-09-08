@@ -3,7 +3,9 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   LineChart, Line, Legend,
 } from 'recharts';
+import { Timer, Clock, CheckCircle2, GraduationCap } from 'lucide-react';
 import { mockStats } from '../../data/mockData';
+import { cn } from '../../lib/utils';
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
@@ -21,40 +23,57 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null;
 };
 
+const statItems = [
+  { label: 'Tiempo promedio/pregunta', val: '2.4 min', Icon: Timer,         color: '#93c5fd' },
+  { label: 'Tiempo total/examen',      val: '48 min',  Icon: Clock,         color: '#f5c842' },
+  { label: 'Tasa de aprobación',       val: '78%',     Icon: CheckCircle2,  color: '#34d399' },
+  { label: 'Alumnos evaluados',        val: '312',     Icon: GraduationCap, color: '#c084fc' },
+];
+
 export default function Statistics() {
   return (
-    <div className="p-8 space-y-8 overflow-y-auto scrollbar-hide max-h-[calc(100vh-4rem)]" style={{ position: 'relative' }}>
+    <div className="scrollbar-hide" style={{ padding: 32, display: 'flex', flexDirection: 'column', gap: 28, overflowY: 'auto', maxHeight: 'calc(100vh - 4rem)' }}>
       {/* Summary */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {[
-          { label: 'Tiempo promedio/pregunta', val: '2.4 min', icon: '⏱️', color: 'blue' },
-          { label: 'Tiempo total/examen', val: '48 min', icon: '⌛', color: 'gold' },
-          { label: 'Tasa de aprobación', val: '78%', icon: '✅', color: 'green' },
-          { label: 'Alumnos evaluados', val: '312', icon: '🎓', color: 'purple' },
-        ].map((s, i) => (
+      <div className="resp-grid-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 16 }}>
+        {statItems.map(({ label, val, Icon, color }, i) => (
           <motion.div
-            key={s.label}
-            initial={{ opacity: 0, y: 20 }}
+            key={label}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.08 }}
-            className="glass"
-          style={{ padding: '20px 22px' }}
+            transition={{ delay: i * 0.07, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="group relative overflow-hidden rounded-2xl p-5 bg-white/5 backdrop-blur-xl border border-white/10 hover:border-white/25 transition-colors duration-300"
           >
-            <p style={{ fontSize: 22, marginBottom: 10 }}>{s.icon}</p>
-            <p className="stat-display" style={{ color: '#f5c842', fontSize: 28, marginBottom: 4 }}>{s.val}</p>
-            <p className="stat-label">{s.label}</p>
+            <div
+              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+              style={{ background: `radial-gradient(ellipse at top left, ${color}14 0%, transparent 65%)` }}
+            />
+            <div
+              className="absolute top-0 left-4 right-4 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+              style={{ background: `linear-gradient(to right, transparent, ${color}45, transparent)` }}
+            />
+            <div
+              className="w-9 h-9 rounded-[10px] flex items-center justify-center mb-[14px] relative"
+              style={{ background: `${color}18`, border: `1px solid ${color}30` }}
+            >
+              <Icon size={16} strokeWidth={1.7} style={{ color }} />
+            </div>
+            <p className="relative font-syne text-[28px] font-bold leading-none tracking-tight mb-1" style={{ color }}>
+              {val}
+            </p>
+            <p className="relative text-[11px] font-medium tracking-[0.04em] text-white/30 uppercase">{label}</p>
           </motion.div>
         ))}
       </div>
 
       {/* Rendimiento por materia */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="glass p-6"
+        className="group relative overflow-hidden bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:border-yellow-500/20 transition-colors duration-300 p-6"
       >
-        <div className="section-divider" style={{ marginBottom: 20 }}><h3>Rendimiento por Materia</h3></div>
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-[radial-gradient(ellipse_at_top_left,rgba(245,200,66,0.05)_0%,transparent_65%)]" />
+        <div className="section-divider relative" style={{ marginBottom: 20 }}><h3>Rendimiento por Materia</h3></div>
         <ResponsiveContainer width="100%" height={220}>
           <BarChart data={mockStats.subjectPerformance} barSize={36}>
             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
@@ -67,14 +86,15 @@ export default function Statistics() {
       </motion.div>
 
       {/* Evolución + Tiempo por pregunta */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="resp-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18 }}>
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="glass p-6"
+          className="group relative overflow-hidden bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:border-yellow-500/20 transition-colors duration-300 p-6"
         >
-          <div className="section-divider" style={{ marginBottom: 20 }}><h3>Evolución Semanal</h3></div>
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-[radial-gradient(ellipse_at_top_left,rgba(245,200,66,0.05)_0%,transparent_65%)]" />
+          <div className="section-divider relative" style={{ marginBottom: 20 }}><h3>Evolución Semanal</h3></div>
           <ResponsiveContainer width="100%" height={200}>
             <LineChart data={mockStats.progressData}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
@@ -89,12 +109,13 @@ export default function Statistics() {
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="glass p-6"
+          className="group relative overflow-hidden bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:border-yellow-500/20 transition-colors duration-300 p-6"
         >
-          <div className="section-divider" style={{ marginBottom: 20 }}><h3>Tiempo Promedio por Pregunta (min)</h3></div>
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-[radial-gradient(ellipse_at_top_left,rgba(245,200,66,0.05)_0%,transparent_65%)]" />
+          <div className="section-divider relative" style={{ marginBottom: 20 }}><h3>Tiempo Promedio por Pregunta (min)</h3></div>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={mockStats.timeMetrics} layout="vertical" barSize={14}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" horizontal={false} />

@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, SlidersHorizontal, CheckCircle, Clock, Users, TrendingUp } from 'lucide-react';
+import { Search, CheckCircle, Users, TrendingUp } from 'lucide-react';
 import { mockStudents, mockStats } from '../../data/mockData';
+import { cn } from '../../lib/utils';
 
 const statCards = [
   { icon: Users,       label: 'Total alumnos',    key: 'totalStudents',  change: '+8%',  changeUp: true  },
@@ -16,28 +17,35 @@ function StatCard({ Icon, label, value, change, changeUp, index }) {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.07, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="glass"
-      style={{ padding: '20px 22px' }}
+      className="group relative overflow-hidden bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:border-yellow-500/30 transition-colors duration-300 p-[20px_22px]"
     >
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 14 }}>
-        <div style={{
-          width: 36, height: 36, borderRadius: 10,
-          background: 'rgba(245,200,66,0.1)', border: '1px solid rgba(245,200,66,0.15)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-        }}>
-          <Icon size={16} strokeWidth={1.7} style={{ color: '#f5c842' }} />
+      {/* Radial hover glow */}
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-[radial-gradient(ellipse_at_top_left,rgba(245,200,66,0.07)_0%,transparent_65%)]" />
+      {/* Top shimmer */}
+      <div className="absolute top-0 left-4 right-4 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-r from-transparent via-yellow-500/35 to-transparent" />
+
+      <div className="relative flex items-start justify-between mb-[14px]">
+        {/* Icon badge */}
+        <div className="w-9 h-9 rounded-[10px] flex items-center justify-center bg-yellow-500/10 border border-yellow-500/15">
+          <Icon size={16} strokeWidth={1.7} className="text-gold-bright" />
         </div>
-        <span style={{
-          fontSize: 11, fontWeight: 600, borderRadius: 999, padding: '2px 8px',
-          background: changeUp ? 'rgba(52,211,153,0.1)' : 'rgba(248,113,113,0.1)',
-          color: changeUp ? '#34d399' : '#f87171',
-          border: `1px solid ${changeUp ? 'rgba(52,211,153,0.2)' : 'rgba(248,113,113,0.2)'}`,
-        }}>
+        {/* Change badge */}
+        <span className={cn(
+          'text-[11px] font-semibold rounded-full px-2 py-0.5 border',
+          changeUp
+            ? 'bg-emerald-400/10 text-emerald-400 border-emerald-400/20'
+            : 'bg-red-400/10 text-red-400 border-red-400/20',
+        )}>
           {change}
         </span>
       </div>
-      <p className="stat-display" style={{ color: '#f5c842', fontSize: 28, marginBottom: 3 }}>{value}</p>
-      <p className="stat-label">{label}</p>
+
+      <p className="relative font-syne text-[28px] font-bold leading-none tracking-tight mb-1 bg-gradient-to-br from-yellow-200 via-gold-bright to-amber-500/80 bg-clip-text text-transparent">
+        {value}
+      </p>
+      <p className="relative text-[11px] font-medium tracking-[0.04em] text-white/30 uppercase">
+        {label}
+      </p>
     </motion.div>
   );
 }
@@ -73,9 +81,23 @@ export default function AdminDashboard() {
   const data = mockStats.overview;
 
   return (
-    <div className="scrollbar-hide resp-padding" style={{ padding: 32, display: 'flex', flexDirection: 'column', gap: 28, overflowY: 'auto', maxHeight: 'calc(100vh - 4rem)', position: 'relative' }}>
+    <div
+      className="scrollbar-hide resp-padding relative"
+      style={{ padding: 32, display: 'flex', flexDirection: 'column', gap: 28, overflowY: 'auto', maxHeight: 'calc(100vh - 4rem)' }}
+    >
+      {/* Dot-grid texture */}
+      <div
+        aria-hidden
+        className="fixed inset-0 pointer-events-none bg-dot-grid bg-dot-32 opacity-100"
+        style={{
+          maskImage: 'radial-gradient(ellipse 80% 80% at 50% 0%, black 40%, transparent 100%)',
+          WebkitMaskImage: 'radial-gradient(ellipse 80% 80% at 50% 0%, black 40%, transparent 100%)',
+          zIndex: 0,
+        }}
+      />
+
       {/* Stat cards */}
-      <div className="resp-grid-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 16 }}>
+      <div className="resp-grid-4 relative" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 16, zIndex: 1 }}>
         {statCards.map((s, i) => (
           <StatCard
             key={s.key}
@@ -94,12 +116,17 @@ export default function AdminDashboard() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="glass"
-        style={{ padding: '24px 24px' }}
+        className="group relative overflow-hidden bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:border-yellow-500/30 transition-colors duration-300 p-6"
+        style={{ zIndex: 1 }}
       >
+        {/* Radial hover glow */}
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-[radial-gradient(ellipse_at_top_left,rgba(245,200,66,0.07)_0%,transparent_65%)]" />
+        {/* Top shimmer */}
+        <div className="absolute top-0 left-4 right-4 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-r from-transparent via-yellow-500/35 to-transparent" />
+
         {/* Table header controls */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 22, flexWrap: 'wrap', gap: 12 }}>
-          <div className="section-divider" style={{ flex: 1 }}>
+          <div className="section-divider relative" style={{ flex: 1 }}>
             <h3>Alumnos</h3>
           </div>
 
@@ -120,19 +147,18 @@ export default function AdminDashboard() {
               />
             </div>
 
-            {/* Filter */}
+            {/* Filter buttons */}
             <div style={{ display: 'flex', gap: 6 }}>
               {[['all','Todos'],['aprobado','Aprobados'],['pendiente','Pendientes']].map(([val, lbl]) => (
                 <button
                   key={val}
                   onClick={() => setFilter(val)}
-                  style={{
-                    padding: '7px 13px', borderRadius: 8, fontSize: 12, fontWeight: 500, cursor: 'pointer',
-                    background: filterStatus === val ? 'rgba(245,200,66,0.12)' : 'rgba(255,255,255,0.04)',
-                    color: filterStatus === val ? '#f5c842' : 'rgba(255,255,255,0.4)',
-                    border: `1px solid ${filterStatus === val ? 'rgba(245,200,66,0.25)' : 'rgba(255,255,255,0.08)'}`,
-                    transition: 'color 0.12s ease, background 0.12s ease, border-color 0.12s ease',
-                  }}
+                  className={cn(
+                    'px-[13px] py-[7px] rounded-lg text-xs font-medium cursor-pointer transition-colors duration-[120ms]',
+                    filterStatus === val
+                      ? 'bg-yellow-500/[0.12] text-gold-bright border border-yellow-500/25'
+                      : 'bg-white/[0.04] text-white/40 border border-white/[0.08]',
+                  )}
                 >
                   {lbl}
                 </button>
@@ -142,7 +168,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Table */}
-        <div style={{ overflowX: 'auto' }}>
+        <div style={{ overflowX: 'auto' }} className="relative">
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>

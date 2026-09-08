@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, Lightbulb, CheckCircle, XCircle, Plus, Trash
 import { mockExamQuestions } from '../../data/mockData';
 import { useAuth } from '../../context/AuthContext';
 import { useBreakpoint } from '../../hooks/useBreakpoint';
+import { cn } from '../../lib/utils';
 
 const DEFAULT_TIME = 60 * 40;
 const SUBJECTS = ['Pensamiento Matemático', 'Comprensión Lectora', 'Redacción Indirecta', 'Pre-medicina', 'Ciencias de la Salud'];
@@ -33,7 +34,7 @@ function TimerBar({ seconds, total }) {
           background: urgent ? 'rgba(220,38,38,0.12)' : 'rgba(255,255,255,0.05)',
           border: `1px solid ${urgent ? 'rgba(248,113,113,0.3)' : 'rgba(255,255,255,0.1)'}`,
         }}>
-          <span style={{ fontFamily: 'Orbitron, sans-serif', fontSize: 16, fontWeight: 700, color: urgent ? '#f87171' : warning ? '#f5c842' : 'white', letterSpacing: '0.05em' }}>
+          <span style={{ fontFamily: 'Syne, sans-serif', fontSize: 16, fontWeight: 700, color: urgent ? '#f87171' : warning ? '#f5c842' : 'white', letterSpacing: '0.05em' }}>
             {mins}:{secs}
           </span>
         </div>
@@ -109,10 +110,12 @@ function QuizCard({ quiz, isBuiltin, isStaff, onStart, onDelete }) {
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      className="glass"
+      className="group relative overflow-hidden bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:border-yellow-500/30 transition-colors duration-300"
       style={{ padding: '20px 22px', display: 'flex', alignItems: 'center', gap: 16 }}
     >
-      <div style={{
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-[radial-gradient(ellipse_at_top_left,rgba(245,200,66,0.07)_0%,transparent_65%)]" />
+      <div className="absolute top-0 left-4 right-4 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-r from-transparent via-yellow-500/30 to-transparent" />
+      <div className="relative" style={{
         width: 50, height: 50, borderRadius: 13, flexShrink: 0,
         background: isBuiltin ? 'linear-gradient(135deg, #b8880f, #f5c842)' : 'rgba(255,255,255,0.06)',
         border: isBuiltin ? 'none' : '1px solid rgba(255,255,255,0.1)',
@@ -124,7 +127,7 @@ function QuizCard({ quiz, isBuiltin, isStaff, onStart, onDelete }) {
         </svg>
       </div>
 
-      <div style={{ flex: 1, minWidth: 0 }}>
+      <div className="relative" style={{ flex: 1, minWidth: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
           <h3 style={{ color: 'white', fontSize: 14.5, fontWeight: 700 }}>{quiz.title}</h3>
           {isBuiltin && (
@@ -138,7 +141,7 @@ function QuizCard({ quiz, isBuiltin, isStaff, onStart, onDelete }) {
         </p>
       </div>
 
-      <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
+      <div className="relative" style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
         {isStaff && !isBuiltin && onDelete && (
           <button onClick={() => onDelete(quiz.id)} style={{
             width: 34, height: 34, borderRadius: 8, border: '1px solid rgba(248,113,113,0.2)',
@@ -214,7 +217,7 @@ function QuizBuilder({ onSave, onCancel }) {
       </div>
 
       {/* Metadata */}
-      <div className="glass" style={{ padding: '20px 22px', marginBottom: 24 }}>
+      <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl" style={{ padding: '20px 22px', marginBottom: 24 }}>
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr auto auto', gap: 12, alignItems: 'end' }}>
           <div>
             <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11.5, marginBottom: 6 }}>Título del simulador *</p>
@@ -242,7 +245,7 @@ function QuizBuilder({ onSave, onCancel }) {
       {/* Questions */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         {questions.map((q, qIdx) => (
-          <motion.div key={q.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="glass" style={{ padding: '20px 22px' }}>
+          <motion.div key={q.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl group relative overflow-hidden" style={{ padding: '20px 22px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
               <span style={{ padding: '3px 10px', borderRadius: 999, fontSize: 11, fontWeight: 600, background: 'rgba(245,200,66,0.08)', color: '#f5c842', border: '1px solid rgba(245,200,66,0.2)' }}>
                 Pregunta {qIdx + 1}
@@ -428,13 +431,13 @@ export default function ExamSimulator({ customQuizzes = [], onAddQuiz, onDeleteQ
 
     return (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 'calc(100vh - 4rem)', padding: 32 }}>
-        <motion.div initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} className="glass" style={{ maxWidth: 440, width: '100%', padding: '44px 40px', textAlign: 'center' }}>
+        <motion.div initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl" style={{ maxWidth: 440, width: '100%', padding: '44px 40px', textAlign: 'center' }}>
           <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 13, marginBottom: 8 }}>Simulacro completado</p>
           <motion.p
             initial={{ scale: 0.7, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.2, type: 'spring', stiffness: 160, damping: 14 }}
-            className="text-gradient-gold"
-            style={{ fontFamily: 'Orbitron, sans-serif', fontSize: 72, fontWeight: 900, lineHeight: 1, marginBottom: 4 }}
+            className="font-syne bg-gradient-to-br from-yellow-200 via-[#f5c842] to-amber-500/80 bg-clip-text text-transparent"
+            style={{ fontSize: 72, fontWeight: 900, lineHeight: 1, marginBottom: 4 }}
           >{score}</motion.p>
           <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 13, marginBottom: 32 }}>de 100 puntos</p>
 
@@ -445,7 +448,7 @@ export default function ExamSimulator({ customQuizzes = [], onAddQuiz, onDeleteQ
               { val: unanswered, label: 'Sin responder', color: '#f5c842' },
             ].map(s => (
               <div key={s.label} style={{ padding: '16px 8px', borderRadius: 12, textAlign: 'center', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
-                <p className="stat-display" style={{ color: s.color, fontSize: 28, marginBottom: 4 }}>{s.val}</p>
+                <p className="font-syne text-[28px] font-bold leading-none mb-1 tracking-tight" style={{ color: s.color }}>{s.val}</p>
                 <p className="stat-label">{s.label}</p>
               </div>
             ))}
@@ -499,7 +502,7 @@ export default function ExamSimulator({ customQuizzes = [], onAddQuiz, onDeleteQ
                 </span>
               </div>
 
-              <div className="glass" style={{ padding: '22px 24px', marginBottom: 20 }}>
+              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl" style={{ padding: '22px 24px', marginBottom: 20 }}>
                 <p style={{ color: 'white', fontSize: 16, lineHeight: 1.7 }}>{q.question}</p>
               </div>
 
@@ -513,7 +516,7 @@ export default function ExamSimulator({ customQuizzes = [], onAddQuiz, onDeleteQ
                 {isAnswered && showExplanation && q.explanation && (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
-                    className="glass-gold" style={{ padding: '16px 20px', marginBottom: 20, overflow: 'hidden' }}
+                    className="bg-yellow-500/[0.04] backdrop-blur-xl border border-yellow-500/20 rounded-2xl" style={{ padding: '16px 20px', marginBottom: 20, overflow: 'hidden' }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 8 }}>
                       <Lightbulb size={14} style={{ color: '#f5c842' }} />

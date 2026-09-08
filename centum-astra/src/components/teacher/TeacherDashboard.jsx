@@ -3,6 +3,7 @@ import { Users, MessageCircle, TrendingUp, CalendarDays } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { mockStudents, mockStats } from '../../data/mockData';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { cn } from '../../lib/utils';
 
 const tooltipStyle = {
   contentStyle: { background: '#0c1d45', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, color: '#fff', fontSize: 12 },
@@ -28,12 +29,11 @@ export default function TeacherDashboard({ setActiveSection }) {
       <motion.div
         initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}
-        className="glass"
-        style={{ padding: '22px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}
+        className="group relative overflow-hidden rounded-2xl p-6 bg-white/5 backdrop-blur-xl border border-white/10 flex items-center justify-between flex-wrap gap-4"
       >
         <div>
-          <h2 style={{ fontFamily: 'Orbitron, sans-serif', fontSize: 20, fontWeight: 800, color: 'white', marginBottom: 4, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>
-            Bienvenida, <span className="text-gradient-gold">{user.name.split(' ')[1]}</span>
+          <h2 className="font-syne text-[22px] font-bold text-white mb-1 tracking-[-0.02em]">
+            Bienvenida, <span className="bg-gradient-to-br from-yellow-200 via-[#f5c842] to-amber-500/80 bg-clip-text text-transparent">{user.name.split(' ')[1]}</span>
           </h2>
           <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 13 }}>
             {user.subject}
@@ -56,19 +56,33 @@ export default function TeacherDashboard({ setActiveSection }) {
             key={label}
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.06 }}
-            className="glass"
-            style={{ padding: '20px 20px', textAlign: 'center' }}
+            transition={{ delay: i * 0.06, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="group relative overflow-hidden rounded-2xl p-5 text-center bg-white/5 backdrop-blur-xl border border-white/10 hover:border-white/25 transition-colors duration-300"
           >
-            <div style={{
-              width: 38, height: 38, borderRadius: 10, margin: '0 auto 12px',
-              background: `${color}18`, border: `1px solid ${color}30`,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
+            {/* Radial glow on hover */}
+            <div
+              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+              style={{ background: `radial-gradient(ellipse at top, ${color}15 0%, transparent 65%)` }}
+            />
+            {/* Top shimmer line on hover */}
+            <div
+              className="absolute top-0 left-4 right-4 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+              style={{ background: `linear-gradient(to right, transparent, ${color}45, transparent)` }}
+            />
+
+            {/* Icon badge */}
+            <div
+              className="w-10 h-10 rounded-[11px] mx-auto mb-3 flex items-center justify-center relative"
+              style={{ background: `${color}18`, border: `1px solid ${color}30` }}
+            >
               <Icon size={17} strokeWidth={1.7} style={{ color }} />
             </div>
-            <p className="stat-display" style={{ color, fontSize: 26, marginBottom: 4 }}>{val}</p>
-            <p className="stat-label">{label}</p>
+
+            {/* Value */}
+            <p className="relative font-syne text-[26px] font-bold leading-none tracking-tight mb-1" style={{ color }}>{val}</p>
+
+            {/* Label */}
+            <p className="relative text-[11px] font-medium tracking-[0.04em] text-white/30 uppercase">{label}</p>
           </motion.div>
         ))}
       </div>
@@ -80,7 +94,7 @@ export default function TeacherDashboard({ setActiveSection }) {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="glass"
+          className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl"
           style={{ padding: '22px 20px' }}
         >
           <div className="section-divider" style={{ marginBottom: 18 }}><h3>Progreso del grupo</h3></div>
@@ -108,7 +122,7 @@ export default function TeacherDashboard({ setActiveSection }) {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="glass"
+          className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl"
           style={{ padding: '22px 20px' }}
         >
           <div className="section-divider" style={{ marginBottom: 18 }}><h3>Ranking del grupo</h3></div>

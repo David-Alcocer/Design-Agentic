@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Upload, X } from 'lucide-react';
 import { mockVideos } from '../../data/mockData';
 import { useAuth } from '../../context/AuthContext';
+import { cn } from '../../lib/utils';
 
 const SUBJECTS = ['Pensamiento Matemático', 'Comprensión Lectora', 'Redacción Indirecta', 'Pre-medicina', 'Ciencias de la Salud'];
 
@@ -66,7 +67,7 @@ function UploadVideoModal({ onClose, onUpload }) {
       <motion.div
         initial={{ opacity: 0, scale: 0.94, y: 16 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        className="glass"
+        className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl"
         style={{ width: '100%', maxWidth: 420, padding: '28px 24px' }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 22 }}>
@@ -141,11 +142,16 @@ function VideoCard({ video, onClick, isActive }) {
     <motion.div
       whileHover={{ y: -5, transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } }}
       onClick={() => onClick(video)}
-      className="glass overflow-hidden cursor-pointer"
-      style={{ border: isActive ? '1px solid rgba(245,200,66,0.4)' : '1px solid rgba(255,255,255,0.08)' }}
+      className={cn(
+        'group relative overflow-hidden cursor-pointer rounded-2xl',
+        'bg-white/5 backdrop-blur-xl border transition-colors duration-300',
+        isActive ? 'border-yellow-500/50' : 'border-white/10 hover:border-yellow-500/30',
+      )}
     >
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-[radial-gradient(ellipse_at_top,rgba(245,200,66,0.07)_0%,transparent_65%)] z-10" />
+      <div className="absolute top-0 left-4 right-4 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-r from-transparent via-yellow-500/35 to-transparent z-10" />
       {/* Thumbnail */}
-      <div className={`relative h-40 bg-gradient-to-br ${thumbColors[video.thumbnail] || 'from-slate-600 to-slate-800'} flex items-center justify-center`}>
+      <div className={`relative z-[1] h-40 bg-gradient-to-br ${thumbColors[video.thumbnail] || 'from-slate-600 to-slate-800'} flex items-center justify-center`}>
         <div className="absolute inset-0 bg-black/20" />
         <motion.div
           whileHover={{ scale: 1.1 }}
@@ -158,7 +164,7 @@ function VideoCard({ video, onClick, isActive }) {
         </span>
       </div>
 
-      <div style={{ padding: '16px 18px' }}>
+      <div className="relative z-[1]" style={{ padding: '16px 18px' }}>
         <span className={`badge border ${subjectColors[video.subject] || 'bg-white/10 text-white/50'} text-[10px]`} style={{ marginBottom: 8, display: 'inline-block' }}>
           {video.subject}
         </span>
@@ -189,7 +195,7 @@ function VideoModal({ video, onClose }) {
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
         onClick={e => e.stopPropagation()}
-        className="glass w-full max-w-2xl p-6"
+        className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl w-full max-w-2xl p-6"
       >
         <div className={`h-72 rounded-xl bg-gradient-to-br ${thumbColors[video.thumbnail] || 'from-slate-600 to-slate-800'} flex items-center justify-center mb-5`}>
           <div className="text-center">
@@ -247,14 +253,14 @@ export default function VideoLibrary() {
       )}
 
       {/* Header */}
-      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="glass p-5">
+      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-5">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div>
             <div className="section-divider" style={{ marginBottom: 6 }}>
               <h3>Videoteca de Sesiones</h3>
             </div>
             <p style={{ color: 'rgba(255,255,255,0.38)', fontSize: 12.5 }}>
-              <span className="stat-display" style={{ fontSize: 18, color: '#f5c842', verticalAlign: 'middle' }}>{videos.length}</span>
+              <span className="font-syne text-[18px] font-bold leading-none tracking-tight bg-gradient-to-br from-yellow-200 via-[#f5c842] to-amber-500/80 bg-clip-text text-transparent">{videos.length}</span>
               <span style={{ marginLeft: 6 }}>sesiones grabadas · {new Set(videos.map(v => v.subject)).size} materias</span>
             </p>
           </div>
@@ -270,14 +276,7 @@ export default function VideoLibrary() {
               <motion.button
                 whileTap={{ scale: 0.97 }}
                 onClick={() => setShowUpload(true)}
-                style={{
-                  display: 'flex', alignItems: 'center', gap: 7,
-                  padding: '9px 16px', borderRadius: 10, cursor: 'pointer',
-                  fontSize: 13, fontWeight: 600,
-                  background: 'rgba(245,200,66,0.1)', color: '#f5c842',
-                  border: '1px solid rgba(245,200,66,0.25)',
-                  whiteSpace: 'nowrap',
-                }}
+                className="btn-gold flex items-center gap-[7px]"
               >
                 <Upload size={14} strokeWidth={2} />
                 Subir sesión

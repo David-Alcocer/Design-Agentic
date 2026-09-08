@@ -4,6 +4,7 @@ import { Download, FileText, BarChart2, Presentation, Lock, Upload, X, Plus } fr
 import { mockModules } from '../../data/mockData';
 import { useAuth } from '../../context/AuthContext';
 import { useBreakpoint } from '../../hooks/useBreakpoint';
+import { cn } from '../../lib/utils';
 
 const typeIcon  = { pdf: FileText, xlsx: BarChart2, ppt: Presentation };
 const typeColor = {
@@ -49,7 +50,7 @@ function UploadModal({ moduleTitle, isMedical, onClose, onUpload }) {
       <motion.div
         initial={{ opacity: 0, scale: 0.94, y: 16 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        className="glass"
+        className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl"
         style={{ width: '100%', maxWidth: 440, padding: '32px 28px' }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
@@ -305,9 +306,20 @@ export default function FileManager({ resources, onAddResource }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2 }}
-            className={isMedical ? 'glass-clinical' : 'glass-gold'}
+            className={cn(
+              'group relative overflow-hidden rounded-2xl bg-white/5 backdrop-blur-xl border transition-colors duration-300',
+              isMedical
+                ? 'border-teal-400/20 hover:border-teal-400/35'
+                : 'border-yellow-500/20 hover:border-yellow-500/35',
+            )}
             style={{ padding: isMobile ? '16px' : '22px 24px', marginBottom: 20 }}
           >
+            <div className={cn(
+              'absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none',
+              isMedical
+                ? 'bg-[radial-gradient(ellipse_at_top_left,rgba(29,233,182,0.07)_0%,transparent_65%)]'
+                : 'bg-[radial-gradient(ellipse_at_top_left,rgba(245,200,66,0.07)_0%,transparent_65%)]',
+            )} />
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
                 <div style={{
