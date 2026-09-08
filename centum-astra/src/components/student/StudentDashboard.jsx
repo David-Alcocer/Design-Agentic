@@ -178,7 +178,7 @@ function ModuleCard({ module, index }) {
       {isMedical && (
         <div style={{
           position: 'absolute', inset: 0, zIndex: 0,
-          backgroundImage: 'url(/fernandozhiminaicela-face-mask-5042631_1920.jpg)',
+          backgroundImage: `url(${import.meta.env.BASE_URL}fernandozhiminaicela-face-mask-5042631_1920.jpg)`,
           backgroundSize: 'cover', backgroundPosition: 'center 35%',
           opacity: 0.06, borderRadius: 14,
         }} />
@@ -274,7 +274,7 @@ export default function StudentDashboard({ setActiveSection }) {
         {/* Astronaut photo — proper img with overflow clip */}
         <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 200, overflow: 'hidden', pointerEvents: 'none' }}>
           <img
-            src="/poldychromos-astronaut-6947813_1920.jpg"
+            src={`${import.meta.env.BASE_URL}poldychromos-astronaut-6947813_1920.jpg`}
             alt=""
             style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 15%', opacity: 0.32, display: 'block' }}
           />

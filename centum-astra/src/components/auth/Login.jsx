@@ -153,14 +153,14 @@ export default function Login() {
       {/* Layer 1: Milky Way — normal crop, covers full page */}
       <div style={{
         position: 'absolute', inset: 0, zIndex: 0,
-        backgroundImage: 'url(/timrael-space-4984262_1920.jpg)',
+        backgroundImage: `url(${import.meta.env.BASE_URL}timrael-space-4984262_1920.jpg)`,
         backgroundSize: 'cover',
         backgroundPosition: 'center 20%',
       }} />
       {/* Layer 2: Same image zoomed + shifted — adds depth via screen blend */}
       <div style={{
         position: 'absolute', inset: 0, zIndex: 0,
-        backgroundImage: 'url(/timrael-space-4984262_1920.jpg)',
+        backgroundImage: `url(${import.meta.env.BASE_URL}timrael-space-4984262_1920.jpg)`,
         backgroundSize: '160%',
         backgroundPosition: 'center 55%',
         opacity: 0.45,

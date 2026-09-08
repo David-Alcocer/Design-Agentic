@@ -1,9 +1,7 @@
-import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 
-// Set base to '/<repo-name>/' for GitHub Pages.
-// Change to '/' if using a custom domain or deploying to root.
 export default defineConfig({
+  base: '/Design-Agentic/',
   plugins: [react()],
-  base: '/centum-astra/',
 })

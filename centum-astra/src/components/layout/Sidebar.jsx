@@ -157,7 +157,7 @@ export default function Sidebar({ activeSection, setActiveSection }) {
       }}>
         <div style={{
           position: 'absolute', inset: 0,
-          backgroundImage: 'url(/51581-solar-system-439046_1920.jpg)',
+          backgroundImage: `url(${import.meta.env.BASE_URL}51581-solar-system-439046_1920.jpg)`,
           backgroundSize: 'cover',
           backgroundPosition: 'center 45%',
           opacity: 0.28,
