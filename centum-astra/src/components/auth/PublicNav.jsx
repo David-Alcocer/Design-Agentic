@@ -513,6 +513,12 @@ function CourseSelector({ onClose }) {
   const transversal = COURSES.filter(c => c.type === 'transversal');
   const specific    = COURSES.filter(c => c.type === 'specific');
 
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
   return (
     <>
       {/* Backdrop — fade independiente, sin blur para no revelar el fondo azul */}
@@ -525,18 +531,22 @@ function CourseSelector({ onClose }) {
         onClick={onClose}
       />
 
-      {/* Modal card — animación propia, sin depender del backdrop */}
+      {/* Centering shell — flexbox, no transform, así Framer Motion no rompe el centrado */}
+      <div style={{
+        position: 'fixed', inset: 0, zIndex: 200,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: '16px',
+        pointerEvents: 'none',
+      }}>
       <motion.div
+        layout
         initial={{ opacity: 0, y: 14, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 8, scale: 0.98 }}
         transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
         style={{
-          position: 'fixed',
-          top: '50%', left: '50%',
-          transform: 'translate(-50%, -50%)',
-          zIndex: 200,
-          width: 'calc(100% - 32px)',
+          pointerEvents: 'auto',
+          width: '100%',
           maxWidth: selected ? 600 : 700,
           maxHeight: '88vh',
           background: '#060c20',
@@ -662,6 +672,7 @@ function CourseSelector({ onClose }) {
           </div>
         )}
       </motion.div>
+      </div>
     </>
   );
 }

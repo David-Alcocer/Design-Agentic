@@ -176,21 +176,41 @@ export default function Login() {
           </motion.div>
 
           {/* Hero headline — Syne, mixed case, editorial */}
-          <motion.div variants={item} style={{ marginBottom: 28 }}>
+          <motion.div variants={item} style={{ marginBottom: 28, position: 'relative' }}>
+            {/* Blur nebuloso dorado detrás del headline */}
+            <div style={{
+              position: 'absolute',
+              top: '30%', left: '-8%',
+              width: '60%', height: '120%',
+              background: 'radial-gradient(ellipse at 40% 50%, rgba(245,200,66,0.13) 0%, transparent 70%)',
+              filter: 'blur(32px)',
+              pointerEvents: 'none',
+              zIndex: 0,
+            }} />
+
             <h1
               className="resp-hero-h1"
               style={{
                 fontFamily: 'Syne, sans-serif', fontWeight: 800,
                 fontSize: 54, lineHeight: 1.0, letterSpacing: '-0.03em',
                 color: 'white', marginBottom: 20,
+                position: 'relative', zIndex: 1,
               }}
             >
               Domina el EXANI-II.<br />
-              <span style={{ color: 'rgba(255,255,255,0.45)', fontWeight: 700 }}>Vive tu vocación.</span>
+              <span style={{
+                background: 'linear-gradient(90deg, #b8880f 0%, #f5c842 45%, #fde68a 100%)',
+                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                fontWeight: 800,
+              }}>
+                Vive tu vocación.
+              </span>
             </h1>
             <p style={{
               color: 'rgba(255,255,255,0.45)', fontSize: 15.5, lineHeight: 1.75,
               maxWidth: 400, fontWeight: 400,
+              position: 'relative', zIndex: 1,
             }}>
               La plataforma que prepara a los mejores aspirantes a carreras de salud — metodología probada, simuladores reales.
             </p>
