@@ -141,9 +141,18 @@ const CLINICAL_STYLE = {
   bar: 'linear-gradient(90deg, #0d9488, #1de9b6, #b2f5e8)',
 };
 
-function ModuleCard({ module, index }) {
+const MODULE_BG = {
+  1: 'math.jpg',
+  2: 'spanish.jpg',
+  3: 'spanish.jpg',
+  4: 'fernandozhiminaicela-face-mask-5042631_1920.jpg',
+  5: 'fernandozhiminaicela-face-mask-5042631_1920.jpg',
+};
+
+function ModuleCard({ module, index, onNavigate }) {
   const isMedical = module.type === 'specific';
   const c = isMedical ? CLINICAL_STYLE : (SPACE_COLORS[module.color] || SPACE_COLORS.blue);
+  const bgImage = MODULE_BG[module.id];
 
   return (
     <motion.div
@@ -151,6 +160,7 @@ function ModuleCard({ module, index }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.06, ease: [0.16, 1, 0.3, 1] }}
       whileHover={{ y: -4 }}
+      onClick={() => onNavigate('modules', module.id)}
       className={cn(
         'group relative overflow-hidden rounded-2xl p-[18px] cursor-pointer',
         isMedical
@@ -160,24 +170,24 @@ function ModuleCard({ module, index }) {
       )}
     >
       {/* Radial hover glow */}
-      {isMedical ? (
-        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-[radial-gradient(ellipse_at_top_left,rgba(29,233,182,0.09)_0%,transparent_65%)]" />
-      ) : (
-        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-[radial-gradient(ellipse_at_top_left,rgba(245,200,66,0.07)_0%,transparent_65%)]" />
-      )}
+      <div className={cn(
+        'absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none',
+        isMedical
+          ? 'bg-[radial-gradient(ellipse_at_top_left,rgba(29,233,182,0.09)_0%,transparent_65%)]'
+          : 'bg-[radial-gradient(ellipse_at_top_left,rgba(245,200,66,0.07)_0%,transparent_65%)]',
+      )} />
 
       {/* Top shimmer line */}
-      {isMedical ? (
-        <div className="absolute top-0 left-4 right-4 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-r from-transparent via-teal-400/45 to-transparent" />
-      ) : (
-        <div className="absolute top-0 left-4 right-4 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-r from-transparent via-yellow-500/35 to-transparent" />
-      )}
+      <div className={cn(
+        'absolute top-0 left-4 right-4 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-r from-transparent to-transparent',
+        isMedical ? 'via-teal-400/45' : 'via-yellow-500/35',
+      )} />
 
-      {/* Stethoscope texture — medical modules only */}
-      {isMedical && (
+      {/* Subject texture — all modules */}
+      {bgImage && (
         <div style={{
           position: 'absolute', inset: 0, zIndex: 0,
-          backgroundImage: `url(${import.meta.env.BASE_URL}fernandozhiminaicela-face-mask-5042631_1920.jpg)`,
+          backgroundImage: `url(${import.meta.env.BASE_URL}${bgImage})`,
           backgroundSize: 'cover', backgroundPosition: 'center 35%',
           opacity: 0.06, borderRadius: 14,
         }} />
@@ -385,7 +395,7 @@ export default function StudentDashboard({ setActiveSection }) {
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(210px, 1fr))', gap: 12 }}>
           {mockModules.map((mod, i) => (
-            <ModuleCard key={mod.id} module={mod} index={i} />
+            <ModuleCard key={mod.id} module={mod} index={i} onNavigate={setActiveSection} />
           ))}
         </div>
       </div>

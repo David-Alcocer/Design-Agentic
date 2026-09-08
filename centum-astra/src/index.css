@@ -23,6 +23,20 @@
     line-height: 1.6;
   }
 
+  /* Subtle film-grain overlay — removes the "too clean / AI-generated" flatness.
+     The SVG feTurbulence is rasterised once by the browser and tiled as a CSS
+     background, so it costs no per-frame GPU work. */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.028;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)'/%3E%3C/svg%3E");
+    background-size: 220px 220px;
+  }
+
   #root {
     width: 100%;
     min-height: 100vh;
@@ -38,54 +52,54 @@
 
   /* ── Glass surfaces ─────────────────────────────── */
   .glass {
-    background: rgba(255,255,255,0.03);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.06);
-    box-shadow: 0 2px 16px rgba(0,0,0,0.35);
-    border-radius: 14px;
-    transition: box-shadow 0.22s ease, border-color 0.22s ease;
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 2px 20px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.04);
+    border-radius: 16px;
+    transition: box-shadow 0.25s ease, border-color 0.25s ease;
   }
 
   @media (hover: hover) {
   .glass:hover {
-    box-shadow: 0 6px 28px rgba(0,0,0,0.45);
-    border-color: rgba(255,255,255,0.1);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06);
+    border-color: rgba(255,255,255,0.13);
   }
   }
 
   .glass-gold {
-    background: rgba(245,200,66,0.03);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(245,200,66,0.12);
-    box-shadow: 0 2px 16px rgba(0,0,0,0.35), 0 0 24px rgba(245,200,66,0.04);
-    border-radius: 14px;
-    transition: box-shadow 0.22s ease, border-color 0.22s ease;
+    background: rgba(245,200,66,0.035);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(245,200,66,0.14);
+    box-shadow: 0 2px 20px rgba(0,0,0,0.38), 0 0 28px rgba(245,200,66,0.05), inset 0 1px 0 rgba(245,200,66,0.06);
+    border-radius: 16px;
+    transition: box-shadow 0.25s ease, border-color 0.25s ease;
   }
 
   @media (hover: hover) {
   .glass-gold:hover {
-    box-shadow: 0 6px 28px rgba(0,0,0,0.45), 0 0 24px rgba(245,200,66,0.08);
-    border-color: rgba(245,200,66,0.2);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 28px rgba(245,200,66,0.1), inset 0 1px 0 rgba(245,200,66,0.08);
+    border-color: rgba(245,200,66,0.24);
   }
   }
 
   /* Medical variant */
   .glass-clinical {
     background: rgba(29,233,182,0.03);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(29,233,182,0.1);
-    box-shadow: 0 2px 16px rgba(0,0,0,0.35), 0 0 20px rgba(29,233,182,0.03);
-    border-radius: 14px;
-    transition: box-shadow 0.22s ease, border-color 0.22s ease;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(29,233,182,0.12);
+    box-shadow: 0 2px 20px rgba(0,0,0,0.38), 0 0 24px rgba(29,233,182,0.04), inset 0 1px 0 rgba(29,233,182,0.05);
+    border-radius: 16px;
+    transition: box-shadow 0.25s ease, border-color 0.25s ease;
   }
 
   @media (hover: hover) {
   .glass-clinical:hover {
-    box-shadow: 0 6px 28px rgba(0,0,0,0.45), 0 0 24px rgba(29,233,182,0.07);
-    border-color: rgba(29,233,182,0.18);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 28px rgba(29,233,182,0.09), inset 0 1px 0 rgba(29,233,182,0.07);
+    border-color: rgba(29,233,182,0.22);
   }
   }
 
@@ -230,10 +244,10 @@
     align-items: center;
     gap: 10px;
     padding: 8px 12px;
-    border-radius: 8px;
-    color: rgba(255,255,255,0.38);
+    border-radius: 9px;
+    color: rgba(255,255,255,0.35);
     font-size: 13px;
-    font-weight: 450;
+    font-weight: 400;
     cursor: pointer;
     transition: color 0.15s ease, background 0.15s ease;
     position: relative;
@@ -241,30 +255,31 @@
     width: 100%;
     text-align: left;
     background: none;
+    letter-spacing: 0.005em;
   }
 
   @media (hover: hover) {
   .nav-link:hover {
-    color: rgba(255,255,255,0.75);
-    background: rgba(255,255,255,0.04);
+    color: rgba(255,255,255,0.72);
+    background: rgba(255,255,255,0.035);
   }
   }
 
   .nav-link-active {
-    color: rgba(255,255,255,0.9);
-    background: rgba(255,255,255,0.05);
+    color: rgba(255,255,255,0.88);
+    background: rgba(255,255,255,0.055);
   }
 
   .nav-link-active::before {
     content: '';
     position: absolute;
     left: 0;
-    top: 25%;
-    height: 50%;
+    top: 22%;
+    height: 56%;
     width: 2px;
-    background: #f5c842;
+    background: linear-gradient(180deg, #b8880f, #f5c842);
     border-radius: 0 2px 2px 0;
-    opacity: 0.9;
+    opacity: 0.85;
   }
 
   /* ── Progress ring glow ─────────────────────────── */
@@ -364,16 +379,16 @@
   filter: blur(140px);
 }
 .blob-gold {
-  background: rgba(245, 200, 66, 0.18);
-  animation: blob-drift-a 14s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  background: rgba(245, 200, 66, 0.09);
+  animation: blob-drift-a 18s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
 }
 .blob-navy {
-  background: rgba(22, 40, 80, 0.9);
-  animation: blob-drift-b 18s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  background: rgba(22, 40, 80, 0.85);
+  animation: blob-drift-b 22s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
 }
 .blob-teal {
-  background: rgba(29, 233, 182, 0.12);
-  animation: blob-drift-a 12s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  background: rgba(29, 233, 182, 0.055);
+  animation: blob-drift-a 15s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
 }
 
 /* ── Raw Form: Directional fill button ───────────────── */
@@ -390,9 +405,9 @@
   font-family: 'Inter', sans-serif;
   letter-spacing: 0.02em;
   color: #f5c842;
-  background: rgba(3, 10, 26, 0.85);
-  border: 1px solid rgba(245, 200, 66, 0.28);
-  border-radius: 8px;
+  background: rgba(3, 10, 26, 0.8);
+  border: 1px solid rgba(245, 200, 66, 0.22);
+  border-radius: 10px;
   cursor: pointer;
   overflow: hidden;
   transition: color 0.24s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.24s ease;
@@ -415,33 +430,33 @@
 .section-divider {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
   margin-bottom: 20px;
 }
 .section-divider h3 {
   font-family: 'Syne', sans-serif;
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.36);
   white-space: nowrap;
   margin: 0;
-  padding-left: 10px;
-  border-left: 3px solid #f5c842;
+  padding-left: 9px;
+  border-left: 2px solid rgba(245,200,66,0.55);
 }
 .section-divider::after {
   content: '';
   flex: 1;
   height: 1px;
-  background: linear-gradient(to right, rgba(245,200,66,0.15), transparent);
+  background: linear-gradient(to right, rgba(255,255,255,0.06), transparent);
 }
 
-/* ── Raw Form: Stat number display ───────────────────── */
+/* ── Stat number display ──────────────────────────────── */
 .stat-display {
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-size: 34px;
-  font-weight: 700;
+  font-weight: 800;
   line-height: 1;
   letter-spacing: -0.03em;
   color: white;

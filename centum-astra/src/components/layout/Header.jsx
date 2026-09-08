@@ -28,9 +28,9 @@ export default function Header({ activeSection, onMenuToggle, isMobile }) {
         justifyContent: 'space-between',
         padding: '0 20px',
         borderBottom: '1px solid rgba(255,255,255,0.05)',
-        background: 'rgba(3,10,26,0.5)',
-        backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)',
+        background: 'rgba(4,11,28,0.72)',
+        backdropFilter: 'blur(18px)',
+        WebkitBackdropFilter: 'blur(18px)',
         position: 'relative',
         zIndex: 10,
         flexShrink: 0,
@@ -54,10 +54,10 @@ export default function Header({ activeSection, onMenuToggle, isMobile }) {
           </button>
         )}
         <span style={{
-          fontFamily: 'Inter, sans-serif',
-          fontSize: 13.5, fontWeight: 500,
-          color: 'rgba(255,255,255,0.55)',
-          letterSpacing: 0,
+          fontFamily: 'Syne, sans-serif',
+          fontSize: 13, fontWeight: 600,
+          color: 'rgba(255,255,255,0.72)',
+          letterSpacing: '0.01em',
         }}>
           {titles[activeSection] || 'Panel'}
         </span>

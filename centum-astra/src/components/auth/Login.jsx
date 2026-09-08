@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Shield, GraduationCap, Rocket, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
@@ -93,6 +93,29 @@ export default function Login() {
   const [password,     setPassword]     = useState('');
   const [loading,      setLoading]      = useState(false);
   const [selectedRole, setSelectedRole] = useState(null);
+  const [videoReady,   setVideoReady]   = useState(false);
+  const videoRef = useRef(null);
+
+  // Load video only after all critical resources (LCP) are done.
+  // Static space photo renders instantly as the fallback/poster.
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    let cancelled = false;
+
+    const startVideo = () => {
+      if (cancelled) return;
+      video.src = `${import.meta.env.BASE_URL}space.mp4`;
+      video.load();
+    };
+
+    if (document.readyState === 'complete') {
+      startVideo();
+    } else {
+      window.addEventListener('load', startVideo, { once: true });
+    }
+    return () => { cancelled = true; };
+  }, []);
 
   function handleRoleSelect(role) {
     setSelectedRole(role.key);
@@ -122,26 +145,50 @@ export default function Login() {
     <div className="relative flex flex-col overflow-hidden min-h-screen bg-[radial-gradient(ellipse_at_top,_#0d1533_0%,_#030a1a_45%,_#000_100%)]">
       <PublicNav />
 
-      {/* ── Space photo layers ── */}
+      {/* ── Layer 1: Static space photo — renders instantly, acts as poster ── */}
       <div style={{
         position: 'absolute', inset: 0, zIndex: 0,
         backgroundImage: `url(${import.meta.env.BASE_URL}timrael-space-4984262_1920.jpg)`,
         backgroundSize: 'cover', backgroundPosition: 'center 20%',
       }} />
+
+      {/* ── Layer 2: Video — src injected after window.load, fades in on canplay ── */}
+      <video
+        ref={videoRef}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="none"
+        onCanPlay={() => setVideoReady(true)}
+        style={{
+          position: 'absolute', inset: 0, zIndex: 1,
+          width: '100%', height: '100%',
+          objectFit: 'cover', objectPosition: 'center 30%',
+          opacity: videoReady ? 0.55 : 0,
+          transition: 'opacity 2.4s cubic-bezier(0.16, 1, 0.3, 1)',
+          pointerEvents: 'none',
+        }}
+      />
+
+      {/* ── Layer 3: Depth blend — gives the nebula cloud feel ── */}
       <div style={{
-        position: 'absolute', inset: 0, zIndex: 0,
+        position: 'absolute', inset: 0, zIndex: 2,
         backgroundImage: `url(${import.meta.env.BASE_URL}timrael-space-4984262_1920.jpg)`,
         backgroundSize: '160%', backgroundPosition: 'center 55%',
-        opacity: 0.35, mixBlendMode: 'screen',
+        opacity: 0.28, mixBlendMode: 'screen',
+        pointerEvents: 'none',
       }} />
-      <div className="absolute inset-0 z-0 bg-[rgba(3,10,26,0.6)]" />
+
+      {/* ── Layer 4: Dark veil — ensures text legibility regardless of video ── */}
+      <div className="absolute inset-0 bg-[rgba(3,10,26,0.58)]" style={{ zIndex: 3 }} />
 
       {/* ── Depth nebula — passive ── */}
-      <div className="absolute top-1/4 left-1/4 w-[50vw] h-[50vw] z-0 pointer-events-none
-        bg-[radial-gradient(ellipse_at_center,rgba(245,200,66,0.05)_0%,transparent_65%)]" />
+      <div className="absolute top-1/4 left-1/4 w-[50vw] h-[50vw] pointer-events-none"
+        style={{ zIndex: 4, background: 'radial-gradient(ellipse at center,rgba(245,200,66,0.05) 0%,transparent 65%)' }} />
 
       {/* ── PANELS ── */}
-      <div className="flex flex-1 pt-[60px]">
+      <div className="flex flex-1 pt-[60px]" style={{ position: 'relative', zIndex: 5 }}>
 
         {/* ── LEFT PANEL — Hero ── */}
         <motion.div

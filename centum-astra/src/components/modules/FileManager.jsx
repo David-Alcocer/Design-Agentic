@@ -190,12 +190,14 @@ function ResourceRow({ resource, isMedical, index, canDownload }) {
   );
 }
 
-export default function FileManager({ resources, onAddResource }) {
+export default function FileManager({ resources, onAddResource, defaultModuleId }) {
   const { user } = useAuth();
   const { isMobile } = useBreakpoint();
   const isStaff   = user.role === 'admin' || user.role === 'teacher';
 
-  const [selectedModule, setSelectedModule] = useState(mockModules[0]);
+  const [selectedModule, setSelectedModule] = useState(
+    () => (defaultModuleId ? mockModules.find(m => m.id === defaultModuleId) : null) ?? mockModules[0],
+  );
   const [typeFilter, setTypeFilter]         = useState('all');
   const [showUpload, setShowUpload]         = useState(false);
 

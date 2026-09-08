@@ -21,6 +21,7 @@ import Whiteboard from './components/whiteboard/Whiteboard';
 function AppContent() {
   const { user } = useAuth();
   const [activeSection, setActiveSection] = useState('dashboard');
+  const [activeModuleId, setActiveModuleId] = useState(null);
   const [moduleResources, setModuleResources] = useState(mockResourcesByModule);
   const [customQuizzes, setCustomQuizzes] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth >= 768);
@@ -40,8 +41,9 @@ function AppContent() {
     setActiveSection('dashboard');
   }, [user?.id]);
 
-  function handleNavigation(section) {
+  function handleNavigation(section, moduleId = null) {
     setActiveSection(section);
+    setActiveModuleId(moduleId);
     if (isMobile) setSidebarOpen(false);
   }
 
@@ -79,7 +81,7 @@ function AppContent() {
       if (activeSection === 'dashboard') return <StudentDashboard setActiveSection={handleNavigation} />;
     }
 
-    if (activeSection === 'modules') return <FileManager resources={moduleResources} onAddResource={addModuleResource} />;
+    if (activeSection === 'modules') return <FileManager resources={moduleResources} onAddResource={addModuleResource} defaultModuleId={activeModuleId} />;
     if (activeSection === 'videos') return <VideoLibrary />;
     if (activeSection === 'forum') return <Forum />;
     if (activeSection === 'exam') return <ExamSimulator customQuizzes={customQuizzes} onAddQuiz={addCustomQuiz} onDeleteQuiz={deleteCustomQuiz} />;
