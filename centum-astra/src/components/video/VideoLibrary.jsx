@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Upload, X } from 'lucide-react';
 import { mockVideos } from '../../data/mockData';
+import { useAuth } from '../../context/AuthContext';
+
+const SUBJECTS = ['Pensamiento Matemático', 'Comprensión Lectora', 'Redacción Indirecta', 'Pre-medicina', 'Ciencias de la Salud'];
 
 const subjectColors = {
   'Pensamiento Matemático': 'bg-blue-500/20 text-blue-300 border-blue-500/30',
@@ -16,6 +20,121 @@ const thumbColors = {
   'RI': 'from-emerald-600 to-emerald-800',
   'CS': 'from-cyan-600 to-cyan-800',
 };
+
+const subjectThumb = {
+  'Pensamiento Matemático': 'PM',
+  'Comprensión Lectora': 'CL',
+  'Redacción Indirecta': 'RI',
+  'Pre-medicina': 'CS',
+  'Ciencias de la Salud': 'CS',
+};
+
+function UploadVideoModal({ onClose, onUpload }) {
+  const { user } = useAuth();
+  const [title, setTitle]       = useState('');
+  const [subject, setSubject]   = useState(SUBJECTS[0]);
+  const [duration, setDuration] = useState('');
+  const [fileName, setFileName] = useState('');
+
+  function handleFileChange(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    setFileName(file.name);
+    if (!title) setTitle(file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' '));
+  }
+
+  function handleSubmit() {
+    if (!title.trim()) return;
+    onUpload({
+      id: Date.now(),
+      title: title.trim(),
+      subject,
+      instructor: user.name,
+      duration: duration || '—',
+      views: '0',
+      thumbnail: subjectThumb[subject] || 'PM',
+    });
+    onClose();
+  }
+
+  return (
+    <div style={{
+      position: 'fixed', inset: 0, zIndex: 100,
+      background: 'rgba(3,10,26,0.82)', backdropFilter: 'blur(8px)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20,
+    }}>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.94, y: 16 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        className="glass"
+        style={{ width: '100%', maxWidth: 420, padding: '28px 24px' }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 22 }}>
+          <div>
+            <h3 style={{ color: 'white', fontSize: 17, fontWeight: 700, marginBottom: 2 }}>Subir sesión</h3>
+            <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 12 }}>Agrega una nueva sesión grabada</p>
+          </div>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', display: 'flex' }}>
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* File picker */}
+        <label style={{
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+          gap: 8, padding: '22px 16px', borderRadius: 12, cursor: 'pointer', marginBottom: 16,
+          border: '2px dashed rgba(245,200,66,0.2)', background: 'rgba(245,200,66,0.02)',
+        }}>
+          <input type="file" style={{ display: 'none' }} onChange={handleFileChange} accept="video/*,.mp4,.mov,.avi" />
+          <Upload size={22} style={{ color: '#f5c842', opacity: 0.7 }} />
+          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, textAlign: 'center' }}>
+            {fileName ? `🎬 ${fileName}` : 'Selecciona el archivo de video'}
+          </p>
+          <p style={{ color: 'rgba(255,255,255,0.22)', fontSize: 11 }}>MP4 · MOV · AVI</p>
+        </label>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 20 }}>
+          <div>
+            <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11.5, marginBottom: 5 }}>Título de la sesión *</p>
+            <input
+              type="text" value={title} onChange={e => setTitle(e.target.value)}
+              placeholder="Ej. Clase 5 — Álgebra lineal"
+              style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 10, padding: '10px 14px', color: 'white', fontSize: 13, outline: 'none' }}
+            />
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 10 }}>
+            <div>
+              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11.5, marginBottom: 5 }}>Materia</p>
+              <select value={subject} onChange={e => setSubject(e.target.value)}
+                style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 10, padding: '10px 14px', color: 'white', fontSize: 13, outline: 'none' }}
+              >
+                {SUBJECTS.map(s => <option key={s} value={s} style={{ background: '#0c1d45' }}>{s}</option>)}
+              </select>
+            </div>
+            <div>
+              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11.5, marginBottom: 5 }}>Duración</p>
+              <input
+                type="text" value={duration} onChange={e => setDuration(e.target.value)}
+                placeholder="45:00"
+                style={{ width: 80, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 10, padding: '10px 14px', color: 'white', fontSize: 13, outline: 'none' }}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', gap: 10 }}>
+          <motion.button
+            whileTap={{ scale: 0.97 }} onClick={handleSubmit} disabled={!title.trim()}
+            className="btn-gold" style={{ flex: 1, opacity: title.trim() ? 1 : 0.4 }}
+          >
+            Publicar sesión
+          </motion.button>
+          <button onClick={onClose} className="btn-ghost">Cancelar</button>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
 
 function VideoCard({ video, onClick, isActive }) {
   return (
@@ -99,21 +218,34 @@ function VideoModal({ video, onClose }) {
 }
 
 export default function VideoLibrary() {
+  const { user } = useAuth();
+  const isStaff = user.role === 'admin' || user.role === 'teacher';
+
+  const [videos, setVideos]         = useState(mockVideos);
   const [activeVideo, setActiveVideo] = useState(null);
-  const [filter, setFilter] = useState('all');
-  const [search, setSearch] = useState('');
+  const [filter, setFilter]         = useState('all');
+  const [search, setSearch]         = useState('');
+  const [showUpload, setShowUpload] = useState(false);
 
-  const subjects = ['all', ...new Set(mockVideos.map(v => v.subject))];
+  const subjects = ['all', ...new Set(videos.map(v => v.subject))];
 
-  const filtered = mockVideos.filter(v => {
+  const filtered = videos.filter(v => {
     const matchFilter = filter === 'all' || v.subject === filter;
     const matchSearch = v.title.toLowerCase().includes(search.toLowerCase()) ||
       v.instructor.toLowerCase().includes(search.toLowerCase());
     return matchFilter && matchSearch;
   });
 
+  function handleUpload(video) {
+    setVideos(prev => [video, ...prev]);
+  }
+
   return (
-    <div className="p-8 space-y-6 overflow-y-auto scrollbar-hide max-h-[calc(100vh-4rem)]">
+    <div className="p-4 sm:p-8 space-y-6 overflow-y-auto scrollbar-hide max-h-[calc(100vh-4rem)]">
+      {showUpload && (
+        <UploadVideoModal onClose={() => setShowUpload(false)} onUpload={handleUpload} />
+      )}
+
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="glass p-5">
         <div className="flex items-center justify-between flex-wrap gap-4">
@@ -122,17 +254,36 @@ export default function VideoLibrary() {
               <h3>Videoteca de Sesiones</h3>
             </div>
             <p style={{ color: 'rgba(255,255,255,0.38)', fontSize: 12.5 }}>
-              <span className="stat-display" style={{ fontSize: 18, color: '#f5c842', verticalAlign: 'middle' }}>{mockVideos.length}</span>
-              <span style={{ marginLeft: 6 }}>sesiones grabadas · {new Set(mockVideos.map(v => v.subject)).size} materias</span>
+              <span className="stat-display" style={{ fontSize: 18, color: '#f5c842', verticalAlign: 'middle' }}>{videos.length}</span>
+              <span style={{ marginLeft: 6 }}>sesiones grabadas · {new Set(videos.map(v => v.subject)).size} materias</span>
             </p>
           </div>
-          <input
-            type="text"
-            placeholder="Buscar sesión..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white placeholder-white/30 text-sm focus:outline-none focus:border-amber-400/40 w-56"
-          />
+          <div className="flex items-center gap-3 flex-wrap">
+            <input
+              type="text"
+              placeholder="Buscar sesión..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white placeholder-white/30 text-sm focus:outline-none focus:border-amber-400/40 w-48 sm:w-56"
+            />
+            {isStaff && (
+              <motion.button
+                whileTap={{ scale: 0.97 }}
+                onClick={() => setShowUpload(true)}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 7,
+                  padding: '9px 16px', borderRadius: 10, cursor: 'pointer',
+                  fontSize: 13, fontWeight: 600,
+                  background: 'rgba(245,200,66,0.1)', color: '#f5c842',
+                  border: '1px solid rgba(245,200,66,0.25)',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                <Upload size={14} strokeWidth={2} />
+                Subir sesión
+              </motion.button>
+            )}
+          </div>
         </div>
 
         {/* Subject filters */}

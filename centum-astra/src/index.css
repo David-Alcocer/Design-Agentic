@@ -48,9 +48,11 @@
     transition: box-shadow 0.22s ease, border-color 0.22s ease;
   }
 
+  @media (hover: hover) {
   .glass:hover {
     box-shadow: 0 8px 36px rgba(0,0,0,0.6), 0 0 20px rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.09);
     border-color: rgba(255,255,255,0.11);
+  }
   }
 
   .glass-gold {
@@ -64,9 +66,11 @@
     transition: box-shadow 0.22s ease, border-color 0.22s ease;
   }
 
+  @media (hover: hover) {
   .glass-gold:hover {
     box-shadow: 0 8px 36px rgba(0,0,0,0.55), 0 0 32px rgba(245,200,66,0.12), inset 0 1px 0 rgba(245,200,66,0.12);
     border-color: rgba(245,200,66,0.28);
+  }
   }
 
   /* Medical variant — "clean room" feel */
@@ -81,9 +85,11 @@
     transition: box-shadow 0.22s ease, border-color 0.22s ease;
   }
 
+  @media (hover: hover) {
   .glass-clinical:hover {
     box-shadow: 0 8px 36px rgba(0,0,0,0.6), 0 0 28px rgba(29,233,182,0.1), inset 0 1px 0 rgba(29,233,182,0.1);
     border-color: rgba(29,233,182,0.22);
+  }
   }
 
   /* ── Buttons ────────────────────────────────────── */
@@ -115,10 +121,12 @@
     transition: opacity 0.18s ease;
   }
 
+  @media (hover: hover) {
   .btn-gold:hover::before { opacity: 1; }
   .btn-gold:hover {
     box-shadow: 0 0 32px rgba(245,200,66,0.35), 0 4px 12px rgba(0,0,0,0.3);
     transform: translateY(-1px);
+  }
   }
   .btn-gold:active { transform: translateY(0); }
 
@@ -138,10 +146,12 @@
     transition: all 0.18s ease;
   }
 
+  @media (hover: hover) {
   .btn-ghost:hover {
     color: white;
     background: rgba(255,255,255,0.08);
     border-color: rgba(255,255,255,0.18);
+  }
   }
 
   .btn-clinical {
@@ -396,8 +406,11 @@
   transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: -1;
 }
-.btn-fill:hover::before { transform: translateX(0); }
-.btn-fill:hover { color: #030a1a; border-color: #f5c842; }
+/* Only apply fill on devices with real hover (not touch screens) */
+@media (hover: hover) {
+  .btn-fill:hover::before { transform: translateX(0); }
+  .btn-fill:hover { color: #030a1a; border-color: #f5c842; }
+}
 
 /* ── Raw Form: Brutalist section divider ─────────────── */
 .section-divider {

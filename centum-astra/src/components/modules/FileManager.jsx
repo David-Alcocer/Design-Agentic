@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Download, FileText, BarChart2, Presentation, Lock, Upload, X, Plus } from 'lucide-react';
 import { mockModules } from '../../data/mockData';
 import { useAuth } from '../../context/AuthContext';
+import { useBreakpoint } from '../../hooks/useBreakpoint';
 
 const typeIcon  = { pdf: FileText, xlsx: BarChart2, ppt: Presentation };
 const typeColor = {
@@ -190,6 +191,7 @@ function ResourceRow({ resource, isMedical, index, canDownload }) {
 
 export default function FileManager({ resources, onAddResource }) {
   const { user } = useAuth();
+  const { isMobile } = useBreakpoint();
   const isStaff   = user.role === 'admin' || user.role === 'teacher';
 
   const [selectedModule, setSelectedModule] = useState(mockModules[0]);
@@ -209,7 +211,7 @@ export default function FileManager({ resources, onAddResource }) {
   };
 
   return (
-    <div style={{ display: 'flex', maxHeight: 'calc(100vh - 4rem)', overflow: 'hidden' }}>
+    <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', maxHeight: 'calc(100vh - 4rem)', overflow: 'hidden' }}>
 
       {showUpload && (
         <UploadModal
@@ -220,41 +222,80 @@ export default function FileManager({ resources, onAddResource }) {
         />
       )}
 
-      {/* Module sidebar */}
-      <div style={{
-        width: 224, flexShrink: 0, padding: '20px 12px',
-        borderRight: '1px solid rgba(255,255,255,0.06)',
-        overflowY: 'auto', background: 'rgba(255,255,255,0.01)',
-      }} className="scrollbar-hide">
-        <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 11, fontWeight: 600, padding: '0 8px', marginBottom: 12, letterSpacing: '0.02em' }}>
-          Módulos
-        </p>
-        {mockModules.map(mod => {
-          const s = moduleSidebarStyle(mod);
-          return (
-            <motion.button
-              key={mod.id}
-              onClick={() => { setSelectedModule(mod); setTypeFilter('all'); }}
-              whileHover={{ x: 3 }}
-              style={{
-                display: 'flex', alignItems: 'center', gap: 10, width: '100%',
-                padding: '10px 12px', borderRadius: 10, textAlign: 'left', cursor: 'pointer',
-                background: s.bg, border: `1px solid ${s.border}`, color: s.color,
-                marginBottom: 4, transition: 'all 0.15s',
-              }}
-            >
-              <span style={{ fontSize: 18, lineHeight: 1, flexShrink: 0 }}>{mod.icon}</span>
-              <div style={{ minWidth: 0 }}>
-                <p style={{ fontSize: 13, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{mod.title}</p>
-                <p style={{ fontSize: 10.5, opacity: 0.55, marginTop: 1 }}>{(resources[mod.id] || []).length} archivos</p>
-              </div>
-            </motion.button>
-          );
-        })}
-      </div>
+      {isMobile ? (
+        /* ── MOBILE: horizontal scrolling module pills ── */
+        <div style={{
+          display: 'flex', gap: 8, padding: '12px 16px',
+          overflowX: 'auto', flexShrink: 0,
+          borderBottom: '1px solid rgba(255,255,255,0.06)',
+          background: 'rgba(255,255,255,0.01)',
+        }} className="scrollbar-hide">
+          {mockModules.map(mod => {
+            const active = selectedModule.id === mod.id;
+            const isMed  = mod.type === 'specific';
+            return (
+              <button
+                key={mod.id}
+                onClick={() => { setSelectedModule(mod); setTypeFilter('all'); }}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 7,
+                  padding: '8px 14px', borderRadius: 20, cursor: 'pointer',
+                  whiteSpace: 'nowrap', flexShrink: 0, fontSize: 12.5, fontWeight: 500,
+                  background: active
+                    ? (isMed ? 'rgba(29,233,182,0.12)' : 'rgba(245,200,66,0.12)')
+                    : 'rgba(255,255,255,0.04)',
+                  color: active
+                    ? (isMed ? '#5eead4' : '#f5c842')
+                    : 'rgba(255,255,255,0.45)',
+                  border: `1px solid ${active
+                    ? (isMed ? 'rgba(29,233,182,0.28)' : 'rgba(245,200,66,0.28)')
+                    : 'rgba(255,255,255,0.08)'}`,
+                  transition: 'all 0.15s',
+                }}
+              >
+                <span style={{ fontSize: 15 }}>{mod.icon}</span>
+                {mod.title}
+              </button>
+            );
+          })}
+        </div>
+      ) : (
+        /* ── DESKTOP: vertical sidebar ── */
+        <div style={{
+          width: 224, flexShrink: 0, padding: '20px 12px',
+          borderRight: '1px solid rgba(255,255,255,0.06)',
+          overflowY: 'auto', background: 'rgba(255,255,255,0.01)',
+        }} className="scrollbar-hide">
+          <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 11, fontWeight: 600, padding: '0 8px', marginBottom: 12, letterSpacing: '0.02em' }}>
+            Módulos
+          </p>
+          {mockModules.map(mod => {
+            const s = moduleSidebarStyle(mod);
+            return (
+              <motion.button
+                key={mod.id}
+                onClick={() => { setSelectedModule(mod); setTypeFilter('all'); }}
+                whileHover={{ x: 3 }}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 10, width: '100%',
+                  padding: '10px 12px', borderRadius: 10, textAlign: 'left', cursor: 'pointer',
+                  background: s.bg, border: `1px solid ${s.border}`, color: s.color,
+                  marginBottom: 4, transition: 'all 0.15s',
+                }}
+              >
+                <span style={{ fontSize: 18, lineHeight: 1, flexShrink: 0 }}>{mod.icon}</span>
+                <div style={{ minWidth: 0 }}>
+                  <p style={{ fontSize: 13, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{mod.title}</p>
+                  <p style={{ fontSize: 10.5, opacity: 0.55, marginTop: 1 }}>{(resources[mod.id] || []).length} archivos</p>
+                </div>
+              </motion.button>
+            );
+          })}
+        </div>
+      )}
 
       {/* Main content */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: 28 }} className="scrollbar-hide">
+      <div style={{ flex: 1, overflowY: 'auto', padding: isMobile ? 16 : 28 }} className="scrollbar-hide">
 
         {/* Module header */}
         <AnimatePresence mode="wait">
@@ -265,7 +306,7 @@ export default function FileManager({ resources, onAddResource }) {
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2 }}
             className={isMedical ? 'glass-clinical' : 'glass-gold'}
-            style={{ padding: '22px 24px', marginBottom: 20 }}
+            style={{ padding: isMobile ? '16px' : '22px 24px', marginBottom: 20 }}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>

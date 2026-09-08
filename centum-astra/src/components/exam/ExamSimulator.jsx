@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Lightbulb, CheckCircle, XCircle, Plus, Trash2, ArrowLeft } from 'lucide-react';
 import { mockExamQuestions } from '../../data/mockData';
 import { useAuth } from '../../context/AuthContext';
+import { useBreakpoint } from '../../hooks/useBreakpoint';
 
 const DEFAULT_TIME = 60 * 40;
 const SUBJECTS = ['Pensamiento Matemático', 'Comprensión Lectora', 'Redacción Indirecta', 'Pre-medicina', 'Ciencias de la Salud'];
@@ -163,6 +164,7 @@ function QuizBuilder({ onSave, onCancel }) {
   const [subject,   setSubject]   = useState(SUBJECTS[0]);
   const [timeLimit, setTimeLimit] = useState(30);
   const [questions, setQuestions] = useState([emptyQuestion()]);
+  const { isMobile } = useBreakpoint();
 
   function updateQ(idx, field, val) {
     setQuestions(prev => prev.map((q, i) => i === idx ? { ...q, [field]: val } : q));
@@ -196,7 +198,7 @@ function QuizBuilder({ onSave, onCancel }) {
   }
 
   return (
-    <div style={{ maxHeight: 'calc(100vh - 4rem)', overflowY: 'auto', padding: '28px 32px' }} className="scrollbar-hide">
+    <div style={{ maxHeight: 'calc(100vh - 4rem)', overflowY: 'auto', padding: isMobile ? '16px' : '28px 32px' }} className="scrollbar-hide">
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28, flexWrap: 'wrap', gap: 12 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -213,7 +215,7 @@ function QuizBuilder({ onSave, onCancel }) {
 
       {/* Metadata */}
       <div className="glass" style={{ padding: '20px 22px', marginBottom: 24 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr auto auto', gap: 12, alignItems: 'end' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr auto auto', gap: 12, alignItems: 'end' }}>
           <div>
             <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11.5, marginBottom: 6 }}>Título del simulador *</p>
             <input type="text" value={title} onChange={e => setTitle(e.target.value)} placeholder="Ej. Simulacro Pre-medicina Sem. 4"
@@ -223,7 +225,7 @@ function QuizBuilder({ onSave, onCancel }) {
           <div>
             <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11.5, marginBottom: 6 }}>Materia</p>
             <select value={subject} onChange={e => setSubject(e.target.value)}
-              style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 10, padding: '10px 14px', color: 'white', fontSize: 13, outline: 'none' }}
+              style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 10, padding: '10px 14px', color: 'white', fontSize: 13, outline: 'none', width: isMobile ? '100%' : 'auto' }}
             >
               {SUBJECTS.map(s => <option key={s} value={s} style={{ background: '#0c1d45' }}>{s}</option>)}
             </select>
@@ -231,7 +233,7 @@ function QuizBuilder({ onSave, onCancel }) {
           <div>
             <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11.5, marginBottom: 6 }}>Tiempo (min)</p>
             <input type="number" value={timeLimit} onChange={e => setTimeLimit(Math.max(5, parseInt(e.target.value) || 5))} min="5" max="180"
-              style={{ width: 80, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 10, padding: '10px 14px', color: 'white', fontSize: 13, outline: 'none' }}
+              style={{ width: isMobile ? '100%' : 80, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 10, padding: '10px 14px', color: 'white', fontSize: 13, outline: 'none' }}
             />
           </div>
         </div>
@@ -263,7 +265,7 @@ function QuizBuilder({ onSave, onCancel }) {
               style={{ width: '100%', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: 10, padding: '10px 14px', color: 'white', fontSize: 14, outline: 'none', resize: 'vertical', marginBottom: 14, fontFamily: 'Inter, sans-serif', lineHeight: 1.5 }}
             />
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 12 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 8, marginBottom: 12 }}>
               {q.options.map((opt, oIdx) => (
                 <div key={oIdx} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <button
