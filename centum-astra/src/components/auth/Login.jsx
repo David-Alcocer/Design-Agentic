@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Shield, GraduationCap, Rocket, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import PublicNav from './PublicNav';
 
 const roles = [
   {
@@ -145,10 +146,11 @@ export default function Login() {
 
   return (
     <div style={{
-      minHeight: '100vh', display: 'flex',
+      minHeight: '100vh', display: 'flex', flexDirection: 'column',
       position: 'relative', overflow: 'hidden',
       background: '#030a1a',
     }}>
+      <PublicNav />
       {/* ── FULL-SCREEN BACKGROUNDS ── */}
       {/* Layer 1: Milky Way — normal crop, covers full page */}
       <div style={{
@@ -176,6 +178,9 @@ export default function Login() {
         pointerEvents: 'none',
       }} />
 
+      {/* ── PANELS WRAPPER — starts below fixed nav ── */}
+      <div style={{ display: 'flex', flex: 1, paddingTop: 60 }}>
+
       {/* ── LEFT PANEL — hidden on mobile ── */}
       <motion.div
         initial={{ opacity: 0, x: -40 }}
@@ -183,7 +188,7 @@ export default function Login() {
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         className="login-left-panel"
         style={{
-          flex: '0 0 58%', padding: '52px 56px',
+          flex: '0 0 58%', padding: '36px 56px',
           display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
           position: 'relative', zIndex: 2,
           overflow: 'hidden',
@@ -501,6 +506,8 @@ export default function Login() {
           </p>
         </div>  {/* end glass card */}
       </motion.div>
+
+      </div> {/* end panels wrapper */}
     </div>
   );
 }

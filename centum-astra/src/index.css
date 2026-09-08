@@ -472,8 +472,19 @@
     #030a1a;
 }
 
+/* ── Reduced motion ──────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* ── Responsive ──────────────────────────────────────── */
 @media (max-width: 767px) {
+  /* Nav CTA label: hide text on very small screens */
+  .nav-cta-label { display: none; }
   /* Padding override for main panel wrappers */
   .resp-padding { padding: 16px !important; }
 
