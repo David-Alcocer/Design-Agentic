@@ -171,7 +171,6 @@ function ModuleCard({ module, index }) {
         cursor: 'pointer',
         position: 'relative',
         overflow: 'hidden',
-        transition: 'box-shadow 0.22s ease',
       }}
     >
       {/* Stethoscope texture — medical modules only */}
@@ -216,9 +215,9 @@ function ModuleCard({ module, index }) {
 
         <div style={{ width: '100%', height: 2, borderRadius: 99, background: 'rgba(255,255,255,0.05)', overflow: 'hidden' }}>
           <motion.div
-            style={{ height: '100%', borderRadius: 99, background: c.bar }}
-            initial={{ width: 0 }}
-            animate={{ width: `${module.progress}%` }}
+            style={{ height: '100%', borderRadius: 99, background: c.bar, width: `${module.progress}%`, transformOrigin: 'left' }}
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
             transition={{ duration: 1.2, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
           />
         </div>

@@ -15,7 +15,7 @@ function StatCard({ Icon, label, value, change, changeUp, index }) {
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.07 }}
+      transition={{ delay: index * 0.07, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       className="glass"
       style={{ padding: '20px 22px' }}
     >
@@ -131,7 +131,7 @@ export default function AdminDashboard() {
                     background: filterStatus === val ? 'rgba(245,200,66,0.12)' : 'rgba(255,255,255,0.04)',
                     color: filterStatus === val ? '#f5c842' : 'rgba(255,255,255,0.4)',
                     border: `1px solid ${filterStatus === val ? 'rgba(245,200,66,0.25)' : 'rgba(255,255,255,0.08)'}`,
-                    transition: 'all 0.15s',
+                    transition: 'color 0.12s ease, background 0.12s ease, border-color 0.12s ease',
                   }}
                 >
                   {lbl}

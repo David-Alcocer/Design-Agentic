@@ -56,7 +56,7 @@ function QuestionNav({ questions, current, answers, setCurrent }) {
             whileHover={{ scale: 1.12 }} whileTap={{ scale: 0.94 }}
             style={{
               width: 34, height: 34, borderRadius: 8, fontSize: 12, fontWeight: 600,
-              cursor: 'pointer', border: '1px solid', transition: 'all 0.15s',
+              cursor: 'pointer', border: '1px solid', transition: 'color 0.12s ease, background 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease',
               background: active ? '#f5c842' : answered ? 'rgba(52,211,153,0.12)' : 'rgba(255,255,255,0.04)',
               color:      active ? '#030a1a' : answered ? '#34d399' : 'rgba(255,255,255,0.4)',
               borderColor:active ? '#f5c842' : answered ? 'rgba(52,211,153,0.3)' : 'rgba(255,255,255,0.08)',
@@ -90,7 +90,7 @@ function OptionButton({ letter, text, state, onClick, disabled }) {
         width: '100%', padding: '14px 16px', borderRadius: 12,
         background: s.bg, border: `1px solid ${s.border}`, color: s.color,
         textAlign: 'left', cursor: disabled ? 'default' : 'pointer',
-        transition: 'all 0.15s ease', fontSize: 14, lineHeight: 1.5,
+        transition: 'color 0.12s ease, background 0.12s ease, border-color 0.12s ease', fontSize: 14, lineHeight: 1.5,
       }}
     >
       <span style={{ width: 28, height: 28, borderRadius: 7, flexShrink: 0, background: s.letterBg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700 }}>
@@ -314,7 +314,7 @@ function QuizBuilder({ onSave, onCancel }) {
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
             width: '100%', padding: '14px', borderRadius: 12, cursor: 'pointer',
             border: '2px dashed rgba(255,255,255,0.1)', background: 'transparent',
-            color: 'rgba(255,255,255,0.35)', fontSize: 13, fontWeight: 500, transition: 'all 0.15s',
+            color: 'rgba(255,255,255,0.35)', fontSize: 13, fontWeight: 500, transition: 'color 0.12s ease, border-color 0.12s ease',
           }}
           onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(245,200,66,0.25)'; e.currentTarget.style.color = '#f5c842'; }}
           onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = 'rgba(255,255,255,0.35)'; }}

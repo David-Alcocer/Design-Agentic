@@ -328,7 +328,7 @@ export default function Login() {
                   width: i === testimonialIdx ? 22 : 6, height: 6,
                   borderRadius: 999, border: 'none', cursor: 'pointer',
                   background: i === testimonialIdx ? '#f5c842' : 'rgba(255,255,255,0.15)',
-                  transition: 'all 0.3s ease',
+                  transition: 'width 0.2s cubic-bezier(0.23,1,0.32,1), background 0.15s ease',
                 }}
               />
             ))}
@@ -426,7 +426,7 @@ export default function Login() {
                     padding: '14px 8px', borderRadius: 12, cursor: 'pointer',
                     background: active ? role.accentBg : 'rgba(255,255,255,0.03)',
                     border: `1px solid ${active ? role.accentBorder : 'rgba(255,255,255,0.07)'}`,
-                    transition: 'all 0.18s ease',
+                    transition: 'background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease',
                     boxShadow: active ? `0 0 20px ${role.accentBg}` : 'none',
                   }}
                 >

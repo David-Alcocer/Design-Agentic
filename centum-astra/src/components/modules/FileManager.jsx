@@ -100,7 +100,7 @@ function UploadModal({ moduleTitle, isMedical, onClose, onUpload }) {
                 background: active ? accent.active : 'rgba(255,255,255,0.04)',
                 color: active ? accent.activeText : 'rgba(255,255,255,0.4)',
                 border: `1px solid ${active ? accent.activeBorder : 'rgba(255,255,255,0.08)'}`,
-                transition: 'all 0.15s',
+                transition: 'color 0.12s ease, background 0.12s ease, border-color 0.12s ease',
               }}>{labels[t]}</button>
             );
           })}
@@ -166,7 +166,7 @@ function ResourceRow({ resource, isMedical, index, canDownload }) {
             background: isMedical ? 'rgba(29,233,182,0.08)' : 'rgba(255,255,255,0.05)',
             color: isMedical ? '#1de9b6' : 'rgba(255,255,255,0.3)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            cursor: 'pointer', transition: 'all 0.15s', flexShrink: 0,
+            cursor: 'pointer', transition: 'color 0.12s ease', flexShrink: 0,
           }}
           onMouseEnter={e => e.currentTarget.style.color = 'white'}
           onMouseLeave={e => e.currentTarget.style.color = isMedical ? '#1de9b6' : 'rgba(255,255,255,0.3)'}
@@ -250,7 +250,7 @@ export default function FileManager({ resources, onAddResource }) {
                   border: `1px solid ${active
                     ? (isMed ? 'rgba(29,233,182,0.28)' : 'rgba(245,200,66,0.28)')
                     : 'rgba(255,255,255,0.08)'}`,
-                  transition: 'all 0.15s',
+                  transition: 'color 0.12s ease, background 0.12s ease, border-color 0.12s ease',
                 }}
               >
                 <span style={{ fontSize: 15 }}>{mod.icon}</span>
@@ -280,7 +280,7 @@ export default function FileManager({ resources, onAddResource }) {
                   display: 'flex', alignItems: 'center', gap: 10, width: '100%',
                   padding: '10px 12px', borderRadius: 10, textAlign: 'left', cursor: 'pointer',
                   background: s.bg, border: `1px solid ${s.border}`, color: s.color,
-                  marginBottom: 4, transition: 'all 0.15s',
+                  marginBottom: 4, transition: 'color 0.12s ease, background 0.12s ease, border-color 0.12s ease',
                 }}
               >
                 <span style={{ fontSize: 18, lineHeight: 1, flexShrink: 0 }}>{mod.icon}</span>
@@ -392,7 +392,7 @@ export default function FileManager({ resources, onAddResource }) {
                 background: active ? (isMedical ? 'rgba(29,233,182,0.1)' : 'rgba(245,200,66,0.1)') : 'rgba(255,255,255,0.04)',
                 color: active ? (isMedical ? '#5eead4' : '#f5c842') : 'rgba(255,255,255,0.4)',
                 border: `1px solid ${active ? (isMedical ? 'rgba(29,233,182,0.25)' : 'rgba(245,200,66,0.25)') : 'rgba(255,255,255,0.08)'}`,
-                transition: 'all 0.15s',
+                transition: 'color 0.12s ease, background 0.12s ease, border-color 0.12s ease',
               }}>{labels[t]}</button>
             );
           })}
