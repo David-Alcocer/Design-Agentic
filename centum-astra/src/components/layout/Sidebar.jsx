@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   LayoutDashboard, Users, FolderOpen, Video,
-  MessageCircle, BarChart2, FileText, PenTool, LogOut,
+  MessageCircle, BarChart2, FileText, PenTool, LogOut, X,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -43,7 +43,7 @@ const roleBadge = {
   student: { bg: 'rgba(45,212,191,0.12)',  color: '#5eead4',  border: 'rgba(45,212,191,0.25)' },
 };
 
-export default function Sidebar({ activeSection, setActiveSection }) {
+export default function Sidebar({ activeSection, setActiveSection, isOpen, onClose, isMobile }) {
   const { user, logout } = useAuth();
   const [logoutHover, setLogoutHover] = useState(false);
   const nav = navByRole[user.role] || studentNav;
@@ -51,18 +51,20 @@ export default function Sidebar({ activeSection, setActiveSection }) {
 
   return (
     <motion.aside
+      animate={{ x: isMobile ? (isOpen ? 0 : -260) : 0 }}
       initial={{ x: -260 }}
-      animate={{ x: 0 }}
-      transition={{ type: 'spring', stiffness: 280, damping: 28 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       style={{
         width: 232,
-        minHeight: '100vh',
+        height: '100vh',
         display: 'flex',
         flexDirection: 'column',
         background: 'linear-gradient(180deg, #060f28 0%, #050d22 100%)',
         borderRight: '1px solid rgba(255,255,255,0.06)',
-        position: 'relative',
-        zIndex: 20,
+        position: isMobile ? 'fixed' : 'relative',
+        top: 0,
+        left: 0,
+        zIndex: isMobile ? 50 : 20,
         flexShrink: 0,
       }}
     >
@@ -73,8 +75,8 @@ export default function Sidebar({ activeSection, setActiveSection }) {
         pointerEvents: 'none',
       }} />
 
-      {/* Logotype */}
-      <div style={{ padding: '24px 20px 20px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+      {/* Logotype + close button (mobile) */}
+      <div style={{ padding: '20px 20px 18px', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <div style={{
             width: 34, height: 34, borderRadius: 9,
@@ -96,6 +98,19 @@ export default function Sidebar({ activeSection, setActiveSection }) {
             </p>
           </div>
         </div>
+        {isMobile && (
+          <button
+            onClick={onClose}
+            style={{
+              background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: 8, padding: '6px', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: 'rgba(255,255,255,0.5)',
+            }}
+          >
+            <X size={16} strokeWidth={1.7} />
+          </button>
+        )}
       </div>
 
       {/* User */}

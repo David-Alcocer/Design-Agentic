@@ -22,7 +22,7 @@ export default function TeacherDashboard({ setActiveSection }) {
   ];
 
   return (
-    <div className="scrollbar-hide" style={{ padding: 32, display: 'flex', flexDirection: 'column', gap: 24, overflowY: 'auto', maxHeight: 'calc(100vh - 4rem)', position: 'relative' }}>
+    <div className="scrollbar-hide resp-padding" style={{ padding: 32, display: 'flex', flexDirection: 'column', gap: 24, overflowY: 'auto', maxHeight: 'calc(100vh - 4rem)', position: 'relative' }}>
 
       {/* Welcome */}
       <motion.div
@@ -50,7 +50,7 @@ export default function TeacherDashboard({ setActiveSection }) {
       </motion.div>
 
       {/* Stat cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 14 }}>
+      <div className="resp-grid-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 14 }}>
         {stats.map(({ Icon, val, label, color }, i) => (
           <motion.div
             key={label}
@@ -74,7 +74,7 @@ export default function TeacherDashboard({ setActiveSection }) {
       </div>
 
       {/* Chart + ranking */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18 }}>
+      <div className="resp-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18 }}>
 
         <motion.div
           initial={{ opacity: 0, y: 12 }}

@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { Menu } from 'lucide-react';
 
 const titles = {
   dashboard:  'Dashboard',
@@ -11,7 +12,7 @@ const titles = {
   whiteboard: 'Pizarra',
 };
 
-export default function Header({ activeSection }) {
+export default function Header({ activeSection, onMenuToggle, isMobile }) {
   return (
     <motion.header
       initial={{ opacity: 0 }}
@@ -21,23 +22,43 @@ export default function Header({ activeSection }) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '0 28px',
+        padding: '0 20px',
         borderBottom: '1px solid rgba(255,255,255,0.06)',
         background: 'rgba(6,15,40,0.6)',
         backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
         position: 'relative',
         zIndex: 10,
         flexShrink: 0,
+        gap: 12,
       }}
     >
-      <h1 style={{ fontFamily: 'Orbitron, sans-serif', fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,0.55)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-        {titles[activeSection] || 'Panel'}
-      </h1>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        {/* Hamburger — only on mobile */}
+        {isMobile && (
+          <button
+            onClick={onMenuToggle}
+            style={{
+              background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: 8, padding: '6px', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: 'rgba(255,255,255,0.65)', flexShrink: 0,
+            }}
+          >
+            <Menu size={18} strokeWidth={1.7} />
+          </button>
+        )}
+        <h1 style={{ fontFamily: 'Orbitron, sans-serif', fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,0.55)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+          {titles[activeSection] || 'Panel'}
+        </h1>
+      </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-        <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: 12.5 }}>
-          {new Date().toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' })}
-        </span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexShrink: 0 }}>
+        {!isMobile && (
+          <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: 12.5 }}>
+            {new Date().toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' })}
+          </span>
+        )}
 
         <div style={{
           display: 'flex', alignItems: 'center', gap: 7,

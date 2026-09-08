@@ -176,11 +176,12 @@ export default function Login() {
         pointerEvents: 'none',
       }} />
 
-      {/* ── LEFT PANEL ── */}
+      {/* ── LEFT PANEL — hidden on mobile ── */}
       <motion.div
         initial={{ opacity: 0, x: -40 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className="login-left-panel"
         style={{
           flex: '0 0 58%', padding: '52px 56px',
           display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
@@ -214,6 +215,7 @@ export default function Login() {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.15, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="resp-hero-h1"
               style={{
                 fontFamily: 'Orbitron, sans-serif', fontSize: 58, fontWeight: 800,
                 color: 'white', lineHeight: 0.92, letterSpacing: '-0.04em', marginBottom: 22,
@@ -380,6 +382,7 @@ export default function Login() {
         initial={{ opacity: 0, x: 40 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+        className="login-right-panel"
         style={{
           flex: '0 0 42%',
           display: 'flex', alignItems: 'center', justifyContent: 'center',

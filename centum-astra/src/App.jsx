@@ -23,10 +23,27 @@ function AppContent() {
   const [activeSection, setActiveSection] = useState('dashboard');
   const [moduleResources, setModuleResources] = useState(mockResourcesByModule);
   const [customQuizzes, setCustomQuizzes] = useState([]);
+  const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth >= 768);
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+
+  useEffect(() => {
+    const handler = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      if (!mobile) setSidebarOpen(true);
+    };
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
 
   useEffect(() => {
     setActiveSection('dashboard');
   }, [user?.id]);
+
+  function handleNavigation(section) {
+    setActiveSection(section);
+    if (isMobile) setSidebarOpen(false);
+  }
 
   function addModuleResource(moduleId, resource) {
     setModuleResources(prev => ({
@@ -49,17 +66,17 @@ function AppContent() {
 
   function renderSection() {
     if (user.role === 'admin') {
-      if (activeSection === 'dashboard' || activeSection === 'students') return <AdminDashboard setActiveSection={setActiveSection} />;
+      if (activeSection === 'dashboard' || activeSection === 'students') return <AdminDashboard setActiveSection={handleNavigation} />;
       if (activeSection === 'stats') return <Statistics />;
     }
 
     if (user.role === 'teacher') {
-      if (activeSection === 'dashboard') return <TeacherDashboard setActiveSection={setActiveSection} />;
+      if (activeSection === 'dashboard') return <TeacherDashboard setActiveSection={handleNavigation} />;
       if (activeSection === 'stats') return <Statistics />;
     }
 
     if (user.role === 'student') {
-      if (activeSection === 'dashboard') return <StudentDashboard setActiveSection={setActiveSection} />;
+      if (activeSection === 'dashboard') return <StudentDashboard setActiveSection={handleNavigation} />;
     }
 
     if (activeSection === 'modules') return <FileManager resources={moduleResources} onAddResource={addModuleResource} />;
@@ -78,13 +95,36 @@ function AppContent() {
   return (
     <div className="flex min-h-screen relative">
       <Stars count={60} />
-      {/* Global ambient blobs — position:fixed so they show on every panel */}
       <div className="blob blob-gold" style={{ width: '55vw', height: '55vw', top: '-25%', right: '-10%', position: 'fixed', zIndex: 0, pointerEvents: 'none' }} />
       <div className="blob blob-teal" style={{ width: '40vw', height: '40vw', bottom: '-20%', left: '12%', position: 'fixed', zIndex: 0, pointerEvents: 'none' }} />
-      <Sidebar activeSection={activeSection} setActiveSection={setActiveSection} />
+
+      {/* Mobile overlay — closes sidebar on tap outside */}
+      {isMobile && sidebarOpen && (
+        <div
+          onClick={() => setSidebarOpen(false)}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 45,
+            background: 'rgba(0,0,0,0.65)',
+            backdropFilter: 'blur(4px)',
+            WebkitBackdropFilter: 'blur(4px)',
+          }}
+        />
+      )}
+
+      <Sidebar
+        activeSection={activeSection}
+        setActiveSection={handleNavigation}
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        isMobile={isMobile}
+      />
 
       <div className="flex-1 flex flex-col relative z-10 min-w-0">
-        <Header activeSection={activeSection} />
+        <Header
+          activeSection={activeSection}
+          onMenuToggle={() => setSidebarOpen(p => !p)}
+          isMobile={isMobile}
+        />
         <main className="flex-1 overflow-hidden">
           <AnimatePresence mode="wait">
             <motion.div

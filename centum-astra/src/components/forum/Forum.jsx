@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { mockForumPosts } from '../../data/mockData';
 import { useAuth } from '../../context/AuthContext';
+import { useBreakpoint } from '../../hooks/useBreakpoint';
 
 const subjectColors = {
   'Pensamiento Matemático': 'bg-blue-500/15 text-blue-300 border-blue-500/30',
@@ -38,7 +39,7 @@ function PostCard({ post, onClick, selected }) {
   );
 }
 
-function PostDetail({ post, onClose, onAddReply }) {
+function PostDetail({ post, onClose, onAddReply, showBack }) {
   const { user } = useAuth();
   const [reply, setReply] = useState('');
   const replies = post.replies;
@@ -69,9 +70,23 @@ function PostDetail({ post, onClose, onAddReply }) {
     >
       {/* Header */}
       <div className="p-6 border-b border-white/8">
+        {showBack && (
+          <button
+            onClick={onClose}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12,
+              color: 'rgba(255,255,255,0.45)', fontSize: 13, fontWeight: 500,
+              background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+            }}
+          >
+            ← Volver al foro
+          </button>
+        )}
         <div className="flex items-start justify-between gap-3 mb-3">
           <h2 className="text-white font-bold text-lg leading-snug flex-1">{post.title}</h2>
-          <button onClick={onClose} className="text-white/40 hover:text-white text-xl cursor-pointer flex-shrink-0">✕</button>
+          {!showBack && (
+            <button onClick={onClose} className="text-white/40 hover:text-white text-xl cursor-pointer flex-shrink-0">✕</button>
+          )}
         </div>
         <div className="flex items-center gap-2 flex-wrap">
           <span className={`badge border ${subjectColors[post.subject] || ''} text-[10px]`}>{post.subject}</span>
@@ -159,6 +174,12 @@ export default function Forum() {
   const [newContent, setNewContent] = useState('');
   const [newSubject, setNewSubject] = useState('Pensamiento Matemático');
   const { user } = useAuth();
+  const { isMobile } = useBreakpoint();
+
+  // On mobile: show only one panel at a time
+  const showingDetail = isMobile && (selectedPost || showNewPost);
+  const showList = !isMobile || !showingDetail;
+  const showDetail = !isMobile || showingDetail;
 
   function handleAddReply(postId, reply) {
     setPosts(prev => prev.map(p =>
@@ -199,9 +220,10 @@ export default function Forum() {
   }
 
   return (
-    <div style={{ padding: '28px 32px', display: 'flex', gap: 20, maxHeight: 'calc(100vh - 4rem)', overflow: 'hidden' }}>
+    <div style={{ padding: isMobile ? '16px' : '28px 32px', display: 'flex', gap: 20, maxHeight: 'calc(100vh - 4rem)', overflow: 'hidden' }}>
       {/* Post list */}
-      <div style={{ width: 300, flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 12, overflow: 'hidden' }}>
+      {showList && (
+      <div style={{ width: isMobile ? '100%' : 300, flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 12, overflow: 'hidden' }}>
         <div className="section-divider" style={{ marginBottom: 4 }}>
           <h3>Foro de dudas</h3>
         </div>
@@ -245,8 +267,10 @@ export default function Forum() {
           </AnimatePresence>
         </div>
       </div>
+      )}
 
       {/* Detail / New post */}
+      {showDetail && (
       <div style={{ flex: 1, overflow: 'hidden' }}>
         <AnimatePresence mode="wait">
           {showNewPost ? (
@@ -258,8 +282,18 @@ export default function Forum() {
               className="glass p-6 h-full flex flex-col gap-4"
             >
               <div className="flex items-center justify-between">
+                {isMobile && (
+                  <button
+                    onClick={() => setShowNewPost(false)}
+                    style={{ color: 'rgba(255,255,255,0.45)', fontSize: 13, background: 'none', border: 'none', cursor: 'pointer' }}
+                  >
+                    ← Volver
+                  </button>
+                )}
                 <h2 className="text-white font-bold text-lg">Nueva Pregunta</h2>
-                <button onClick={() => setShowNewPost(false)} className="text-white/40 hover:text-white cursor-pointer">✕</button>
+                {!isMobile && (
+                  <button onClick={() => setShowNewPost(false)} className="text-white/40 hover:text-white cursor-pointer">✕</button>
+                )}
               </div>
               <input
                 type="text"
@@ -282,19 +316,24 @@ export default function Forum() {
                 placeholder="Describe tu duda con detalle..."
                 value={newContent}
                 onChange={e => setNewContent(e.target.value)}
-                rows={8}
+                rows={isMobile ? 6 : 8}
                 className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-amber-400/40 resize-none"
               />
               <div className="flex gap-3">
                 <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={handleNewPost} className="btn-gold flex-1">
                   Publicar pregunta
                 </motion.button>
-                <button onClick={() => setShowNewPost(false)} className="btn-ghost">Cancelar</button>
+                {!isMobile && <button onClick={() => setShowNewPost(false)} className="btn-ghost">Cancelar</button>}
               </div>
             </motion.div>
           ) : selectedPost ? (
             <motion.div key={selectedPost.id} className="h-full">
-              <PostDetail post={selectedPost} onClose={() => setSelectedPost(null)} onAddReply={handleAddReply} />
+              <PostDetail
+                post={selectedPost}
+                onClose={() => setSelectedPost(null)}
+                onAddReply={handleAddReply}
+                showBack={isMobile}
+              />
             </motion.div>
           ) : (
             <motion.div
@@ -313,6 +352,7 @@ export default function Forum() {
           )}
         </AnimatePresence>
       </div>
+      )}
     </div>
   );
 }

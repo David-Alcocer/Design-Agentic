@@ -257,7 +257,7 @@ export default function StudentDashboard({ setActiveSection }) {
   const { user } = useAuth();
 
   return (
-    <div className="scrollbar-hide" style={{ padding: 32, display: 'flex', flexDirection: 'column', gap: 24, overflowY: 'auto', maxHeight: 'calc(100vh - 4rem)', position: 'relative' }}>
+    <div className="scrollbar-hide resp-padding" style={{ padding: 32, display: 'flex', flexDirection: 'column', gap: 24, overflowY: 'auto', maxHeight: 'calc(100vh - 4rem)', position: 'relative' }}>
 
       {/* Raw Form background blobs */}
       <div className="blob blob-gold" style={{ width: '70vw', height: '70vw', top: '-30%', right: '-20%', zIndex: 0, pointerEvents: 'none', position: 'fixed' }} />
@@ -271,8 +271,8 @@ export default function StudentDashboard({ setActiveSection }) {
         className="glass-gold"
         style={{ padding: '28px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, position: 'relative', overflow: 'hidden', zIndex: 1 }}
       >
-        {/* Astronaut photo — proper img with overflow clip */}
-        <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 200, overflow: 'hidden', pointerEvents: 'none' }}>
+        {/* Astronaut photo — hidden on mobile */}
+        <div className="resp-hide-mobile" style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 200, overflow: 'hidden', pointerEvents: 'none' }}>
           <img
             src={`${import.meta.env.BASE_URL}poldychromos-astronaut-6947813_1920.jpg`}
             alt=""
@@ -309,7 +309,7 @@ export default function StudentDashboard({ setActiveSection }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         className="glass"
-        style={{ padding: '20px 28px', display: 'flex', alignItems: 'center', gap: 0, zIndex: 1 }}
+        style={{ padding: '20px 28px', display: 'flex', alignItems: 'center', gap: 0, zIndex: 1, flexWrap: 'wrap' }}
       >
         {STATS.map(({ Icon, label, val }, i) => (
           <div key={label} style={{
@@ -328,7 +328,7 @@ export default function StudentDashboard({ setActiveSection }) {
       </motion.div>
 
       {/* Progress ring + chart */}
-      <div style={{ display: 'grid', gridTemplateColumns: '220px 1fr', gap: 16, zIndex: 1 }}>
+      <div className="resp-grid-ring" style={{ display: 'grid', gridTemplateColumns: '220px 1fr', gap: 16, zIndex: 1 }}>
 
         {/* Ring */}
         <motion.div
