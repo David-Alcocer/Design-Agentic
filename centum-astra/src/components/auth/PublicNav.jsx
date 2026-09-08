@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronRight, ChevronLeft, X, Clock, CheckCircle, XCircle, Lightbulb } from 'lucide-react';
+import { cn } from '../../lib/utils';
 
 /* ── Mock data ──────────────────────────────────────────── */
 const COURSES = [
@@ -603,15 +604,15 @@ function CourseSelector({ onClose }) {
                 style={{ padding: '20px 24px 24px' }}
               >
                 {/* Transversal */}
-                <div style={{ marginBottom: 24 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
-                    <div style={{ height: 1, flex: 1, background: 'rgba(255,255,255,0.06)' }} />
-                    <span style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: '0.1em', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase' }}>
+                <div className="mb-6">
+                  <div className="flex items-center gap-2 mb-[14px]">
+                    <div className="h-px flex-1 bg-white/[0.06]" />
+                    <span className="text-[10px] font-bold tracking-[0.12em] text-white/28 uppercase">
                       Módulos Transversales
                     </span>
-                    <div style={{ height: 1, flex: 1, background: 'rgba(255,255,255,0.06)' }} />
+                    <div className="h-px flex-1 bg-white/[0.06]" />
                   </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))', gap: 10 }}>
+                  <div className="grid gap-[10px]" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))' }}>
                     {transversal.map((c, i) => (
                       <CourseCard key={c.id} course={c} index={i} onSelect={() => setSelected(c.id)} />
                     ))}
@@ -620,21 +621,21 @@ function CourseSelector({ onClose }) {
 
                 {/* Specific */}
                 <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
-                    <div style={{ height: 1, flex: 1, background: 'rgba(29,233,182,0.12)' }} />
-                    <span style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: '0.1em', color: 'rgba(29,233,182,0.5)', textTransform: 'uppercase' }}>
+                  <div className="flex items-center gap-2 mb-[14px]">
+                    <div className="h-px flex-1 bg-teal-400/[0.12]" />
+                    <span className="text-[10px] font-bold tracking-[0.12em] text-teal-400/45 uppercase">
                       Módulos Específicos
                     </span>
-                    <div style={{ height: 1, flex: 1, background: 'rgba(29,233,182,0.12)' }} />
+                    <div className="h-px flex-1 bg-teal-400/[0.12]" />
                   </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))', gap: 10 }}>
+                  <div className="grid gap-[10px]" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))' }}>
                     {specific.map((c, i) => (
                       <CourseCard key={c.id} course={c} index={transversal.length + i} onSelect={() => setSelected(c.id)} />
                     ))}
                   </div>
                 </div>
 
-                <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.2)', fontSize: 11.5, marginTop: 20 }}>
+                <p className="text-center text-white/20 text-[11.5px] mt-5 tracking-[0.01em]">
                   3 preguntas · sin registro · experiencia real del simulador EXANI-II
                 </p>
               </motion.div>
@@ -655,18 +656,18 @@ function CourseSelector({ onClose }) {
 
         {/* CTA footer (only on grid) */}
         {!selected && (
-          <div style={{
-            padding: '16px 24px',
-            borderTop: '1px solid rgba(255,255,255,0.07)',
-            background: 'rgba(245,200,66,0.03)',
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap',
-            flexShrink: 0,
-          }}>
+          <div className="flex items-center justify-between gap-3 flex-wrap px-6 py-4 shrink-0
+            border-t border-white/[0.07]
+            bg-[radial-gradient(ellipse_at_left,rgba(245,200,66,0.04)_0%,transparent_70%)]">
             <div>
-              <p style={{ color: 'white', fontSize: 13, fontWeight: 600, marginBottom: 2 }}>¿Listo para el EXANI-II?</p>
-              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12 }}>Accede a todos los módulos y seguimiento personalizado.</p>
+              <p className="text-white text-[13px] font-semibold mb-[2px] tracking-[-0.01em]">
+                ¿Listo para el EXANI-II?
+              </p>
+              <p className="text-white/38 text-[12px]">
+                Accede a todos los módulos y seguimiento personalizado.
+              </p>
             </div>
-            <button onClick={onClose} className="btn-gold" style={{ padding: '10px 20px', fontSize: 13, flexShrink: 0 }}>
+            <button onClick={onClose} className="btn-gold shrink-0" style={{ padding: '10px 20px', fontSize: 13 }}>
               Crear cuenta gratis
             </button>
           </div>
@@ -677,59 +678,87 @@ function CourseSelector({ onClose }) {
   );
 }
 
-/* ── Course card ────────────────────────────────────────── */
+/* ── Course card — Deep Space Premium ──────────────────── */
 function CourseCard({ course, index, onSelect }) {
   const isMed = course.clinical;
 
   return (
     <motion.button
-      initial={{ opacity: 0, y: 10 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.05, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-      whileHover={{ y: -2 }}
+      transition={{ delay: index * 0.06, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      whileHover={{ y: -6, scale: 1.02 }}
+      whileTap={{ scale: 0.97 }}
       onClick={onSelect}
-      style={{
-        display: 'flex', flexDirection: 'column', alignItems: 'flex-start',
-        padding: '18px 16px 14px', borderRadius: 12, cursor: 'pointer', textAlign: 'left',
-        background: isMed ? 'rgba(29,233,182,0.04)' : 'rgba(255,255,255,0.03)',
-        border: `1px solid ${isMed ? 'rgba(29,233,182,0.1)' : 'rgba(255,255,255,0.06)'}`,
-        transition: 'border-color 0.18s ease, background 0.18s ease',
-        position: 'relative', overflow: 'hidden',
-      }}
-      onMouseEnter={e => {
-        e.currentTarget.style.borderColor = isMed ? 'rgba(29,233,182,0.22)' : 'rgba(255,255,255,0.12)';
-        e.currentTarget.style.background  = isMed ? 'rgba(29,233,182,0.06)' : 'rgba(255,255,255,0.05)';
-      }}
-      onMouseLeave={e => {
-        e.currentTarget.style.borderColor = isMed ? 'rgba(29,233,182,0.1)' : 'rgba(255,255,255,0.06)';
-        e.currentTarget.style.background  = isMed ? 'rgba(29,233,182,0.04)' : 'rgba(255,255,255,0.03)';
-      }}
-    >
-      {isMed && (
-        <div style={{
-          position: 'absolute', inset: 0, zIndex: 0,
-          backgroundImage: `url(${import.meta.env.BASE_URL}fernandozhiminaicela-face-mask-5042631_1920.jpg)`,
-          backgroundSize: 'cover', backgroundPosition: 'center 35%',
-          opacity: 0.04,
-        }} />
+      className={cn(
+        /* base */
+        'group relative flex flex-col items-start gap-3 p-[18px_16px_16px] rounded-2xl cursor-pointer text-left w-full overflow-hidden',
+        /* glassmorphism */
+        'bg-white/5 backdrop-blur-xl',
+        /* border — Tailwind hover handles color, FM handles transform */
+        'border transition-colors duration-300 ease-out',
+        isMed
+          ? 'border-teal-400/20 hover:border-teal-400/50'
+          : 'border-white/10 hover:border-yellow-500/50',
       )}
-      <div style={{ position: 'relative', zIndex: 1, width: '100%' }}>
-        <div style={{ fontSize: 20, marginBottom: 12 }}>{course.icon}</div>
-        <p style={{
-          color: isMed ? 'rgba(224,250,246,0.9)' : 'rgba(255,255,255,0.88)',
-          fontSize: 13.5, fontWeight: 600, marginBottom: 5, lineHeight: 1.35,
-        }}>
+    >
+      {/* ── Radial glow that appears on hover ── */}
+      <div className={cn(
+        'absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none',
+        isMed
+          ? 'bg-[radial-gradient(ellipse_at_top_left,rgba(29,233,182,0.11)_0%,transparent_62%)]'
+          : 'bg-[radial-gradient(ellipse_at_top_left,rgba(245,200,66,0.09)_0%,transparent_62%)]',
+      )} />
+
+      {/* ── Top-edge shimmer line ── */}
+      <div className={cn(
+        'absolute top-0 left-5 right-5 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none',
+        isMed
+          ? 'bg-gradient-to-r from-transparent via-teal-400/55 to-transparent'
+          : 'bg-gradient-to-r from-transparent via-yellow-500/45 to-transparent',
+      )} />
+
+      {/* ── Icon badge ── */}
+      <div className={cn(
+        'text-[20px] p-[9px] rounded-xl shrink-0',
+        isMed ? 'bg-teal-400/10' : 'bg-white/[0.06]',
+      )}>
+        {course.icon}
+      </div>
+
+      {/* ── Label + description ── */}
+      <div className="flex-1 space-y-[5px]">
+        <p className={cn(
+          'text-[13.5px] font-semibold leading-snug tracking-[-0.01em]',
+          isMed ? 'text-teal-50/90' : 'text-white/88',
+        )}>
           {course.label}
         </p>
-        <p style={{ color: isMed ? 'rgba(29,233,182,0.5)' : 'rgba(255,255,255,0.36)', fontSize: 12, lineHeight: 1.5 }}>
+        <p className={cn(
+          'text-[12px] leading-relaxed',
+          isMed ? 'text-teal-300/45' : 'text-white/36',
+        )}>
           {course.desc}
         </p>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 14 }}>
-          <span style={{ fontSize: 11.5, color: isMed ? 'rgba(29,233,182,0.6)' : 'rgba(245,200,66,0.65)', fontWeight: 500 }}>
-            Probar ahora
-          </span>
-          <ChevronRight size={11} style={{ color: isMed ? 'rgba(29,233,182,0.5)' : 'rgba(245,200,66,0.5)' }} />
-        </div>
+      </div>
+
+      {/* ── Probar ahora CTA ── */}
+      <div className="flex items-center gap-[5px]">
+        <span className={cn(
+          'text-[11.5px] font-medium transition-colors duration-200',
+          isMed
+            ? 'text-teal-400/55 group-hover:text-teal-400/80'
+            : 'text-yellow-500/60 group-hover:text-yellow-400/85',
+        )}>
+          Probar ahora
+        </span>
+        <ChevronRight
+          size={11}
+          className={cn(
+            'transition-all duration-200 group-hover:translate-x-0.5',
+            isMed ? 'text-teal-400/45' : 'text-yellow-500/50',
+          )}
+        />
       </div>
     </motion.button>
   );
