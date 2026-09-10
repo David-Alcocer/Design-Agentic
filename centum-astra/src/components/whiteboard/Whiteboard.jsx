@@ -46,9 +46,9 @@ function ExportModal({ onClose, onExport }) {
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontSize: 22,
             }}>✓</div>
-            <p style={{ color: '#34d399', fontWeight: 700, fontSize: 16, marginBottom: 6 }}>¡Exportado correctamente!</p>
+            <p style={{ color: '#34d399', fontWeight: 700, fontSize: 16, marginBottom: 6 }}>Descarga completada</p>
             <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13 }}>
-              La captura fue enviada al módulo y descargada.
+              La pizarra se descargó como PNG en tu equipo.
             </p>
           </motion.div>
         ) : (

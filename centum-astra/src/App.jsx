@@ -7,14 +7,12 @@ import Login from './components/auth/Login';
 import Sidebar from './components/layout/Sidebar';
 import Header from './components/layout/Header';
 
-import { mockResourcesByModule } from './data/mockData';
 import AdminDashboard from './components/admin/AdminDashboard';
 import Statistics from './components/admin/Statistics';
 import TeacherDashboard from './components/teacher/TeacherDashboard';
 import StudentDashboard from './components/student/StudentDashboard';
 import FileManager from './components/modules/FileManager';
 import VideoLibrary from './components/video/VideoLibrary';
-import Forum from './components/forum/Forum';
 import ExamSimulator from './components/exam/ExamSimulator';
 import Whiteboard from './components/whiteboard/Whiteboard';
 
@@ -22,7 +20,6 @@ function AppContent() {
   const { user } = useAuth();
   const [activeSection, setActiveSection] = useState('dashboard');
   const [activeModuleId, setActiveModuleId] = useState(null);
-  const [moduleResources, setModuleResources] = useState(mockResourcesByModule);
   const [customQuizzes, setCustomQuizzes] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth >= 768);
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
@@ -47,13 +44,6 @@ function AppContent() {
     if (isMobile) setSidebarOpen(false);
   }
 
-  function addModuleResource(moduleId, resource) {
-    setModuleResources(prev => ({
-      ...prev,
-      [moduleId]: [...(prev[moduleId] || []), resource],
-    }));
-  }
-
   function addCustomQuiz(quiz) {
     setCustomQuizzes(prev => [...prev, quiz]);
   }
@@ -68,7 +58,7 @@ function AppContent() {
 
   function renderSection() {
     if (user.role === 'admin') {
-      if (activeSection === 'dashboard' || activeSection === 'students') return <AdminDashboard setActiveSection={handleNavigation} />;
+      if (activeSection === 'dashboard' || activeSection === 'students') return <AdminDashboard />;
       if (activeSection === 'stats') return <Statistics />;
     }
 
@@ -81,11 +71,10 @@ function AppContent() {
       if (activeSection === 'dashboard') return <StudentDashboard setActiveSection={handleNavigation} />;
     }
 
-    if (activeSection === 'modules') return <FileManager resources={moduleResources} onAddResource={addModuleResource} defaultModuleId={activeModuleId} />;
+    if (activeSection === 'modules') return <FileManager defaultModuleId={activeModuleId} />;
     if (activeSection === 'videos') return <VideoLibrary />;
-    if (activeSection === 'forum') return <Forum />;
     if (activeSection === 'exam') return <ExamSimulator customQuizzes={customQuizzes} onAddQuiz={addCustomQuiz} onDeleteQuiz={deleteCustomQuiz} />;
-    if (activeSection === 'whiteboard' && user.role !== 'student') return <Whiteboard onExportToModule={addModuleResource} />;
+    if (activeSection === 'whiteboard' && user.role !== 'student') return <Whiteboard />;
 
     return (
       <div className="flex items-center justify-center h-full text-white/20 text-lg p-8">

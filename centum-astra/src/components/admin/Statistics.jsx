@@ -3,9 +3,8 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   LineChart, Line, Legend,
 } from 'recharts';
-import { Timer, Clock, CheckCircle2, GraduationCap } from 'lucide-react';
+import { CheckCircle2, GraduationCap } from 'lucide-react';
 import { mockStats } from '../../data/mockData';
-import { cn } from '../../lib/utils';
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
@@ -24,17 +23,15 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 const statItems = [
-  { label: 'Tiempo promedio/pregunta', val: '2.4 min', Icon: Timer,         color: '#93c5fd' },
-  { label: 'Tiempo total/examen',      val: '48 min',  Icon: Clock,         color: '#f5c842' },
-  { label: 'Tasa de aprobación',       val: '78%',     Icon: CheckCircle2,  color: '#34d399' },
-  { label: 'Alumnos evaluados',        val: '312',     Icon: GraduationCap, color: '#c084fc' },
+  { label: 'Tasa de aprobación', val: '78%', Icon: CheckCircle2,  color: '#34d399' },
+  { label: 'Alumnos evaluados',  val: '312', Icon: GraduationCap, color: '#c084fc' },
 ];
 
 export default function Statistics() {
   return (
     <div className="scrollbar-hide" style={{ padding: 32, display: 'flex', flexDirection: 'column', gap: 28, overflowY: 'auto', maxHeight: 'calc(100vh - 4rem)' }}>
-      {/* Summary */}
-      <div className="resp-grid-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 16 }}>
+      {/* Summary — 2 key KPIs */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 16 }}>
         {statItems.map(({ label, val, Icon, color }, i) => (
           <motion.div
             key={label}
@@ -69,11 +66,14 @@ export default function Statistics() {
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
+        transition={{ delay: 0.12 }}
         className="group relative overflow-hidden bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:border-yellow-500/20 transition-colors duration-300 p-6"
       >
         <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-[radial-gradient(ellipse_at_top_left,rgba(245,200,66,0.05)_0%,transparent_65%)]" />
-        <div className="section-divider relative" style={{ marginBottom: 20 }}><h3>Rendimiento por Materia</h3></div>
+        <div className="section-divider relative" style={{ marginBottom: 4 }}><h3>Rendimiento por Materia</h3></div>
+        <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 12.5, marginBottom: 20 }}>
+          Identifica qué área necesita refuerzo urgente
+        </p>
         <ResponsiveContainer width="100%" height={220}>
           <BarChart data={mockStats.subjectPerformance} barSize={36}>
             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
@@ -85,49 +85,30 @@ export default function Statistics() {
         </ResponsiveContainer>
       </motion.div>
 
-      {/* Evolución + Tiempo por pregunta */}
-      <div className="resp-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18 }}>
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="group relative overflow-hidden bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:border-yellow-500/20 transition-colors duration-300 p-6"
-        >
-          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-[radial-gradient(ellipse_at_top_left,rgba(245,200,66,0.05)_0%,transparent_65%)]" />
-          <div className="section-divider relative" style={{ marginBottom: 20 }}><h3>Evolución Semanal</h3></div>
-          <ResponsiveContainer width="100%" height={200}>
-            <LineChart data={mockStats.progressData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-              <XAxis dataKey="name" tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 11 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 11 }} axisLine={false} tickLine={false} />
-              <Tooltip content={<CustomTooltip />} />
-              <Legend wrapperStyle={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)' }} />
-              <Line type="monotone" dataKey="promedio" name="Promedio" stroke="#f5c842" strokeWidth={2.5} dot={{ fill: '#f5c842', r: 4 }} />
-              <Line type="monotone" dataKey="maxScore" name="Máximo" stroke="#60a5fa" strokeWidth={2} dot={{ fill: '#60a5fa', r: 3 }} strokeDasharray="5 3" />
-            </LineChart>
-          </ResponsiveContainer>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="group relative overflow-hidden bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:border-yellow-500/20 transition-colors duration-300 p-6"
-        >
-          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-[radial-gradient(ellipse_at_top_left,rgba(245,200,66,0.05)_0%,transparent_65%)]" />
-          <div className="section-divider relative" style={{ marginBottom: 20 }}><h3>Tiempo Promedio por Pregunta (min)</h3></div>
-          <ResponsiveContainer width="100%" height={200}>
-            <BarChart data={mockStats.timeMetrics} layout="vertical" barSize={14}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" horizontal={false} />
-              <XAxis type="number" tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 11 }} axisLine={false} tickLine={false} domain={[0, 5]} />
-              <YAxis dataKey="question" type="category" tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 10 }} axisLine={false} tickLine={false} width={80} />
-              <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.03)' }} />
-              <Bar dataKey="avgTime" name="Promedio" fill="#1de9b6" radius={[0, 6, 6, 0]} />
-              <Bar dataKey="limit" name="Límite" fill="rgba(251,191,36,0.2)" radius={[0, 6, 6, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </motion.div>
-      </div>
+      {/* Evolución semanal */}
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.22 }}
+        className="group relative overflow-hidden bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:border-yellow-500/20 transition-colors duration-300 p-6"
+      >
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-[radial-gradient(ellipse_at_top_left,rgba(245,200,66,0.05)_0%,transparent_65%)]" />
+        <div className="section-divider relative" style={{ marginBottom: 4 }}><h3>Evolución Semanal</h3></div>
+        <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 12.5, marginBottom: 20 }}>
+          Detecta tendencias y ajusta el plan de estudio
+        </p>
+        <ResponsiveContainer width="100%" height={220}>
+          <LineChart data={mockStats.progressData}>
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+            <XAxis dataKey="name" tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 11 }} axisLine={false} tickLine={false} />
+            <YAxis tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 11 }} axisLine={false} tickLine={false} />
+            <Tooltip content={<CustomTooltip />} />
+            <Legend wrapperStyle={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)' }} />
+            <Line type="monotone" dataKey="promedio" name="Promedio" stroke="#f5c842" strokeWidth={2.5} dot={{ fill: '#f5c842', r: 4 }} />
+            <Line type="monotone" dataKey="maxScore" name="Máximo" stroke="#60a5fa" strokeWidth={2} dot={{ fill: '#60a5fa', r: 3 }} strokeDasharray="5 3" />
+          </LineChart>
+        </ResponsiveContainer>
+      </motion.div>
     </div>
   );
 }

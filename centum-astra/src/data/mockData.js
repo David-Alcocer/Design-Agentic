@@ -52,49 +52,6 @@ export const mockVideos = [
   { id: 6, title: 'Epidemiología y Salud Pública', subject: 'Ciencias de la Salud', date: '2025-08-18', duration: '1:40:15', instructor: 'Dr. Ramón Solis', views: 78, thumbnail: 'CS' },
 ];
 
-export const mockForumPosts = [
-  {
-    id: 1,
-    title: '¿Cómo diferenciar entre función par e impar?',
-    subject: 'Pensamiento Matemático',
-    author: 'Ana García López',
-    authorRole: 'student',
-    date: '2025-08-29',
-    content: 'Llevo tiempo confundiéndome con este tema. ¿Hay algún truco para recordarlo más fácilmente?',
-    replies: [
-      { id: 1, author: 'Mtra. Sofía Ramírez', role: 'teacher', content: 'Excelente pregunta. Una función es par cuando f(-x) = f(x) para todo x en su dominio...', date: '2025-08-29' },
-      { id: 2, author: 'Luis Hernández', role: 'student', content: 'A mí me ayudó mucho la representación gráfica, la simetría es clave.', date: '2025-08-29' },
-    ],
-    likes: 12,
-    resolved: true,
-  },
-  {
-    id: 2,
-    title: 'Duda sobre los tipos de inferencia en Comprensión Lectora',
-    subject: 'Comprensión Lectora',
-    author: 'Diego Reyes Fuentes',
-    authorRole: 'student',
-    date: '2025-08-28',
-    content: 'En el examen EXANI-II siempre me confundo entre inferencia literal y extraliteral. ¿Alguien puede explicarme la diferencia?',
-    replies: [
-      { id: 1, author: 'Prof. Carlos Mendoza', role: 'teacher', content: 'La inferencia literal se extrae directamente del texto, mientras que la extraliteral requiere...', date: '2025-08-28' },
-    ],
-    likes: 8,
-    resolved: false,
-  },
-  {
-    id: 3,
-    title: 'Material de apoyo para Biología Celular',
-    subject: 'Pre-medicina',
-    author: 'María Morales Cruz',
-    authorRole: 'student',
-    date: '2025-08-27',
-    content: '¿Alguien sabe si hay material adicional para repasar la mitosis y meiosis?',
-    replies: [],
-    likes: 15,
-    resolved: false,
-  },
-];
 
 export const mockExamQuestions = [
   {
@@ -160,32 +117,59 @@ export const mockExamQuestions = [
   },
 ];
 
-export const mockResourcesByModule = {
+
+export const mockSessionsByModule = {
   1: [
-    { name: 'Álgebra: Sistemas de Ecuaciones', ext: 'PDF', size: '2.4 MB', type: 'pdf' },
-    { name: 'Ejercicios de Funciones', ext: 'PDF', size: '1.8 MB', type: 'pdf' },
-    { name: 'Geometría Analítica — Resumen', ext: 'PDF', size: '3.1 MB', type: 'pdf' },
-    { name: 'Banco de Preguntas Mat. 2024', ext: 'Excel', size: '1.2 MB', type: 'xlsx' },
-    { name: 'Presentación Estadística', ext: 'PPT', size: '5.6 MB', type: 'ppt' },
+    { id: '1-s1', label: 'Primera clase: Ecuaciones de primer grado', visible: true, videoIds: [1], resources: [
+      { name: 'Álgebra: Sistemas de Ecuaciones', ext: 'PDF', size: '2.4 MB', type: 'pdf' },
+      { name: 'Ejercicios de Funciones', ext: 'PDF', size: '1.8 MB', type: 'pdf' },
+    ]},
+    { id: '1-s2', label: 'Segunda clase: Geometría Analítica', visible: true, videoIds: [], resources: [
+      { name: 'Geometría Analítica — Resumen', ext: 'PDF', size: '3.1 MB', type: 'pdf' },
+      { name: 'Banco de Preguntas Mat. 2024', ext: 'Excel', size: '1.2 MB', type: 'xlsx' },
+    ]},
+    { id: '1-s3', label: 'Tercera clase: Estadística y Probabilidad', visible: true, videoIds: [5], resources: [
+      { name: 'Presentación Estadística', ext: 'PPT', size: '5.6 MB', type: 'ppt' },
+    ]},
   ],
   2: [
-    { name: 'Estrategias de Lectura Veloz', ext: 'PDF', size: '1.5 MB', type: 'pdf' },
-    { name: 'Textos para Práctica', ext: 'PDF', size: '4.2 MB', type: 'pdf' },
-    { name: 'Tipos de Inferencia — Guía', ext: 'PDF', size: '0.9 MB', type: 'pdf' },
+    { id: '2-s1', label: 'Primera clase: Estrategias de Lectura Veloz', visible: true, videoIds: [], resources: [
+      { name: 'Estrategias de Lectura Veloz', ext: 'PDF', size: '1.5 MB', type: 'pdf' },
+    ]},
+    { id: '2-s2', label: 'Segunda clase: Textos Argumentativos', visible: true, videoIds: [2], resources: [
+      { name: 'Textos para Práctica', ext: 'PDF', size: '4.2 MB', type: 'pdf' },
+    ]},
+    { id: '2-s3', label: 'Tercera clase: Tipos de Inferencia', visible: true, videoIds: [], resources: [
+      { name: 'Tipos de Inferencia — Guía', ext: 'PDF', size: '0.9 MB', type: 'pdf' },
+    ]},
   ],
   3: [
-    { name: 'Reglas Ortográficas Completas', ext: 'PDF', size: '2.0 MB', type: 'pdf' },
-    { name: 'Ejercicios de Puntuación', ext: 'PDF', size: '1.1 MB', type: 'pdf' },
+    { id: '3-s1', label: 'Primera clase: Ortografía y Reglas Base', visible: true, videoIds: [3], resources: [
+      { name: 'Reglas Ortográficas Completas', ext: 'PDF', size: '2.0 MB', type: 'pdf' },
+    ]},
+    { id: '3-s2', label: 'Segunda clase: Puntuación Avanzada', visible: true, videoIds: [], resources: [
+      { name: 'Ejercicios de Puntuación', ext: 'PDF', size: '1.1 MB', type: 'pdf' },
+    ]},
   ],
   4: [
-    { name: 'Biología Celular — Atlas', ext: 'PDF', size: '8.3 MB', type: 'pdf' },
-    { name: 'Anatomía Humana Básica', ext: 'PDF', size: '12.1 MB', type: 'pdf' },
-    { name: 'Bioquímica: Metabolismo', ext: 'PDF', size: '5.4 MB', type: 'pdf' },
-    { name: 'Preguntas EXANI Biología', ext: 'Excel', size: '2.1 MB', type: 'xlsx' },
+    { id: '4-s1', label: 'Primera clase: Biología Celular', visible: true, videoIds: [4], resources: [
+      { name: 'Biología Celular — Atlas', ext: 'PDF', size: '8.3 MB', type: 'pdf' },
+    ]},
+    { id: '4-s2', label: 'Segunda clase: Anatomía Humana', visible: true, videoIds: [], resources: [
+      { name: 'Anatomía Humana Básica', ext: 'PDF', size: '12.1 MB', type: 'pdf' },
+    ]},
+    { id: '4-s3', label: 'Tercera clase: Bioquímica y Metabolismo', visible: true, videoIds: [], resources: [
+      { name: 'Bioquímica: Metabolismo', ext: 'PDF', size: '5.4 MB', type: 'pdf' },
+      { name: 'Preguntas EXANI Biología', ext: 'Excel', size: '2.1 MB', type: 'xlsx' },
+    ]},
   ],
   5: [
-    { name: 'Epidemiología Básica', ext: 'PDF', size: '3.2 MB', type: 'pdf' },
-    { name: 'Salud Pública y Prevención', ext: 'PDF', size: '2.8 MB', type: 'pdf' },
+    { id: '5-s1', label: 'Primera clase: Epidemiología Básica', visible: true, videoIds: [], resources: [
+      { name: 'Epidemiología Básica', ext: 'PDF', size: '3.2 MB', type: 'pdf' },
+    ]},
+    { id: '5-s2', label: 'Segunda clase: Salud Pública y Prevención', visible: true, videoIds: [6], resources: [
+      { name: 'Salud Pública y Prevención', ext: 'PDF', size: '2.8 MB', type: 'pdf' },
+    ]},
   ],
 };
 
@@ -210,12 +194,5 @@ export const mockStats = {
     { subject: 'Redacción Ind.', avg: 69, students: 312 },
     { subject: 'Pre-medicina', avg: 77, students: 156 },
     { subject: 'Ciencias Salud', avg: 72, students: 156 },
-  ],
-  timeMetrics: [
-    { question: 'Q1-Álgebra', avgTime: 2.3, limit: 3 },
-    { question: 'Q2-Cálculo', avgTime: 3.8, limit: 3 },
-    { question: 'Q3-Lectura', avgTime: 1.9, limit: 2.5 },
-    { question: 'Q4-Redacción', avgTime: 2.1, limit: 2.5 },
-    { question: 'Q5-Biología', avgTime: 1.7, limit: 2 },
   ],
 };

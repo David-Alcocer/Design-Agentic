@@ -122,7 +122,7 @@ function ProgressHero({ value }) {
           textAnchor="middle"
           fill="rgba(255,255,255,0.35)"
           fontSize="11"
-          fontFamily="Inter, sans-serif"
+          fontFamily="Plus Jakarta Sans, sans-serif"
         >
           de 100 puntos
         </text>
@@ -271,10 +271,6 @@ export default function StudentDashboard({ setActiveSection }) {
   return (
     <div className="scrollbar-hide resp-padding" style={{ padding: 32, display: 'flex', flexDirection: 'column', gap: 24, overflowY: 'auto', maxHeight: 'calc(100vh - 4rem)', position: 'relative' }}>
 
-      {/* Background blobs */}
-      <div className="blob blob-gold" style={{ width: '70vw', height: '70vw', top: '-30%', right: '-20%', zIndex: 0, pointerEvents: 'none', position: 'fixed' }} />
-      <div className="blob blob-teal"  style={{ width: '50vw', height: '50vw', bottom: '-20%', left: '-10%',  zIndex: 0, pointerEvents: 'none', position: 'fixed' }} />
-
       {/* Welcome banner */}
       <motion.div
         initial={{ opacity: 0, y: -16 }}
@@ -300,7 +296,7 @@ export default function StudentDashboard({ setActiveSection }) {
             transition={{ delay: 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             className="font-syne text-[22px] font-bold text-white mb-1.5 tracking-[-0.02em]"
           >
-            Bienvenido, <span className="bg-gradient-to-br from-yellow-200 via-[#f5c842] to-amber-500/80 bg-clip-text text-transparent">{user.name.split(' ')[0]}</span>
+            Welcome, <span className="bg-gradient-to-br from-yellow-200 via-[#f5c842] to-amber-500/80 bg-clip-text text-transparent">{user.name.split(' ')[0]}</span>
           </motion.h2>
           <p style={{ color: 'rgba(255,255,255,0.58)', fontSize: 13.5 }}>
             Estás a <span style={{ color: '#f5c842', fontWeight: 700 }}>{100 - user.progress} puntos</span> de completar tu preparación.

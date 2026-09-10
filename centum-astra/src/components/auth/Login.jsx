@@ -171,17 +171,8 @@ export default function Login() {
         }}
       />
 
-      {/* ── Layer 3: Depth blend — gives the nebula cloud feel ── */}
-      <div style={{
-        position: 'absolute', inset: 0, zIndex: 2,
-        backgroundImage: `url(${import.meta.env.BASE_URL}timrael-space-4984262_1920.jpg)`,
-        backgroundSize: '160%', backgroundPosition: 'center 55%',
-        opacity: 0.28, mixBlendMode: 'screen',
-        pointerEvents: 'none',
-      }} />
-
-      {/* ── Layer 4: Dark veil — ensures text legibility regardless of video ── */}
-      <div className="absolute inset-0 bg-[rgba(3,10,26,0.58)]" style={{ zIndex: 3 }} />
+      {/* ── Layer 3: Dark veil — ensures text legibility regardless of video ── */}
+      <div className="absolute inset-0 bg-[rgba(3,10,26,0.52)]" style={{ zIndex: 3 }} />
 
       {/* ── Depth nebula — passive ── */}
       <div className="absolute top-1/4 left-1/4 w-[50vw] h-[50vw] pointer-events-none"
@@ -224,28 +215,14 @@ export default function Login() {
             }}
           />
 
-          {/* Brand mark */}
-          <motion.div variants={item} className="flex items-center gap-[11px] mb-16">
-            <div className="w-9 h-9 rounded-[9px] shrink-0 flex items-center justify-center
-              bg-gradient-to-br from-gold-muted to-gold-bright shadow-glow-gold">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M8 1L9.8 6.2H15.2L10.7 9.4L12.5 14.6L8 11.4L3.5 14.6L5.3 9.4L0.8 6.2H6.2L8 1Z" fill="#030a1a" />
-              </svg>
-            </div>
-            <div>
-              <p className="font-display text-[11.5px] font-bold text-white tracking-[0.14em] leading-tight">CENTUM</p>
-              <p className="font-display text-[9.5px] font-medium text-gold-bright tracking-[0.16em] leading-tight">ASTRA</p>
-            </div>
-          </motion.div>
-
           {/* Hero headline */}
           <motion.div variants={item} className="mb-8 relative">
             <h1
               className="resp-hero-h1 relative z-10"
               style={{
-                fontFamily: 'Syne, sans-serif', fontWeight: 800,
-                fontSize: 54, lineHeight: 1.0, letterSpacing: '-0.03em',
-                marginBottom: 20,
+                fontFamily: 'Syne, sans-serif', fontWeight: 900,
+                fontSize: 76, lineHeight: 0.95, letterSpacing: '-0.04em',
+                marginBottom: 24,
               }}
             >
               {/* First line — white fading to white/55, giving depth */}
@@ -316,7 +293,7 @@ export default function Login() {
             {/* Form header */}
             <div className="mb-7">
               <h2 className="font-syne text-[22px] font-bold text-white mb-[5px] tracking-[-0.02em]">
-                Bienvenido
+                Welcome
               </h2>
               <p className="text-white/38 text-[13.5px] leading-[1.5]">
                 Selecciona tu perfil para continuar

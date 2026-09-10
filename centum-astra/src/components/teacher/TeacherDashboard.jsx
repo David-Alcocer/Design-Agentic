@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Users, MessageCircle, TrendingUp, CalendarDays } from 'lucide-react';
+import { Users, TrendingUp, CalendarDays } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { mockStudents, mockStats } from '../../data/mockData';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
@@ -16,10 +16,9 @@ export default function TeacherDashboard({ setActiveSection }) {
   const topStudents = [...myStudents].sort((a, b) => b.avgScore - a.avgScore);
 
   const stats = [
-    { Icon: Users,         val: myStudents.length, label: 'Mis alumnos',          color: '#93c5fd' },
-    { Icon: MessageCircle, val: '8',                label: 'Dudas pendientes',     color: '#f5c842' },
-    { Icon: TrendingUp,    val: '84%',              label: 'Promedio del grupo',   color: '#34d399' },
-    { Icon: CalendarDays,  val: '3',                label: 'Sesiones esta semana', color: '#c084fc' },
+    { Icon: Users,        val: myStudents.length, label: 'Mis alumnos',          color: '#93c5fd' },
+    { Icon: TrendingUp,   val: '84%',              label: 'Promedio del grupo',   color: '#34d399' },
+    { Icon: CalendarDays, val: '3',                label: 'Sesiones esta semana', color: '#c084fc' },
   ];
 
   return (
@@ -33,24 +32,19 @@ export default function TeacherDashboard({ setActiveSection }) {
       >
         <div>
           <h2 className="font-syne text-[22px] font-bold text-white mb-1 tracking-[-0.02em]">
-            Bienvenida, <span className="bg-gradient-to-br from-yellow-200 via-[#f5c842] to-amber-500/80 bg-clip-text text-transparent">{user.name.split(' ')[1]}</span>
+            Welcome, <span className="bg-gradient-to-br from-yellow-200 via-[#f5c842] to-amber-500/80 bg-clip-text text-transparent">{user.name.split(' ')[0]}</span>
           </h2>
           <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 13 }}>
             {user.subject}
           </p>
         </div>
-        <div style={{ display: 'flex', gap: 10 }}>
-          <button onClick={() => setActiveSection('forum')} className="btn-ghost" style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-            <MessageCircle size={14} strokeWidth={1.7} /> Foro
-          </button>
-          <button onClick={() => setActiveSection('stats')} className="btn-fill" style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '9px 18px', fontSize: 12, fontWeight: 600, letterSpacing: '0.04em' }}>
-            <TrendingUp size={14} strokeWidth={2} /> Estadísticas
-          </button>
-        </div>
+        <button onClick={() => setActiveSection('stats')} className="btn-fill" style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '9px 18px', fontSize: 12, fontWeight: 600, letterSpacing: '0.04em' }}>
+          <TrendingUp size={14} strokeWidth={2} /> Estadísticas
+        </button>
       </motion.div>
 
       {/* Stat cards */}
-      <div className="resp-grid-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 14 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 14 }}>
         {stats.map(({ Icon, val, label, color }, i) => (
           <motion.div
             key={label}

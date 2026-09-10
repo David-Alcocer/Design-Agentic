@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Lightbulb, CheckCircle, XCircle, Plus, Trash2, ArrowLeft } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Lightbulb, CheckCircle, XCircle, Plus, Trash2, ArrowLeft, ImagePlus, X, RotateCcw, List } from 'lucide-react';
 import { mockExamQuestions } from '../../data/mockData';
 import { useAuth } from '../../context/AuthContext';
 import { useBreakpoint } from '../../hooks/useBreakpoint';
@@ -160,7 +160,7 @@ function QuizCard({ quiz, isBuiltin, isStaff, onStart, onDelete }) {
 }
 
 /* ── Quiz builder ──────────────────────────────────── */
-const emptyQuestion = () => ({ id: Date.now() + Math.random(), question: '', options: ['', '', '', ''], correct: 0, explanation: '' });
+const emptyQuestion = () => ({ id: Date.now() + Math.random(), question: '', options: ['', '', '', ''], correct: 0, explanation: '', image: null });
 
 function QuizBuilder({ onSave, onCancel }) {
   const [title,     setTitle]     = useState('');
@@ -265,8 +265,64 @@ function QuizBuilder({ onSave, onCancel }) {
               onChange={e => updateQ(qIdx, 'question', e.target.value)}
               placeholder="Escribe la pregunta aquí..."
               rows={2}
-              style={{ width: '100%', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: 10, padding: '10px 14px', color: 'white', fontSize: 14, outline: 'none', resize: 'vertical', marginBottom: 14, fontFamily: 'Inter, sans-serif', lineHeight: 1.5 }}
+              style={{ width: '100%', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: 10, padding: '10px 14px', color: 'white', fontSize: 14, outline: 'none', resize: 'vertical', marginBottom: 12, lineHeight: 1.5 }}
             />
+
+            {/* Image attachment per question */}
+            <div style={{ marginBottom: 14 }}>
+              {q.image ? (
+                <div style={{ position: 'relative', display: 'inline-block' }}>
+                  <img
+                    src={q.image}
+                    alt="Imagen del reactivo"
+                    style={{ maxHeight: 180, maxWidth: '100%', borderRadius: 10, border: '1px solid rgba(255,255,255,0.12)', objectFit: 'contain' }}
+                  />
+                  <button
+                    onClick={() => updateQ(qIdx, 'image', null)}
+                    style={{
+                      position: 'absolute', top: 6, right: 6,
+                      width: 24, height: 24, borderRadius: '50%', border: 'none', cursor: 'pointer',
+                      background: 'rgba(3,10,26,0.75)', color: 'white',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}
+                    title="Quitar imagen"
+                  >
+                    <X size={12} />
+                  </button>
+                </div>
+              ) : (
+                <label style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 7,
+                  padding: '7px 14px', borderRadius: 9, cursor: 'pointer',
+                  border: '1px dashed rgba(245,200,66,0.25)', background: 'rgba(245,200,66,0.04)',
+                  color: 'rgba(245,200,66,0.6)', fontSize: 12, fontWeight: 500,
+                  transition: 'border-color 0.12s ease, color 0.12s ease',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(245,200,66,0.5)'; e.currentTarget.style.color = '#f5c842'; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(245,200,66,0.25)'; e.currentTarget.style.color = 'rgba(245,200,66,0.6)'; }}
+                >
+                  <input
+                    type="file"
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    onChange={e => {
+                      const file = e.target.files[0];
+                      if (!file) return;
+                      if (file.size > 5 * 1024 * 1024) {
+                        alert('La imagen no puede superar 5 MB.');
+                        e.target.value = '';
+                        return;
+                      }
+                      const reader = new FileReader();
+                      reader.onload = ev => updateQ(qIdx, 'image', ev.target.result);
+                      reader.readAsDataURL(file);
+                    }}
+                  />
+                  <ImagePlus size={14} />
+                  Adjuntar imagen al reactivo
+                </label>
+              )}
+            </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 8, marginBottom: 12 }}>
               {q.options.map((opt, oIdx) => (
@@ -326,6 +382,191 @@ function QuizBuilder({ onSave, onCancel }) {
         </button>
       </div>
       <div style={{ height: 48 }} />
+    </div>
+  );
+}
+
+/* ── CENEVAL Results Report ──────────────────────────── */
+const CLINICAL_SUBJECTS = ['Pre-medicina', 'Ciencias de la Salud'];
+
+function CenevalReport({ questions, answers, onRepeat, onHome }) {
+  const correct   = Object.entries(answers).filter(([id, ans]) => {
+    const q = questions.find(q => q.id === parseInt(id));
+    return q && q.correct === ans;
+  }).length;
+  const total      = questions.length;
+  const unanswered = total - Object.keys(answers).length;
+  const incorrect  = total - correct - unanswered;
+  const ceneval    = Math.round(700 + (correct / total) * 600);
+  const barPct     = ((ceneval - 700) / 600) * 100;
+
+  const zones = [
+    { label: 'Insuficiente',  min: 700,  max: 849,  color: '#f87171', bg: 'rgba(248,113,113,0.12)', border: 'rgba(248,113,113,0.25)' },
+    { label: 'Básico',        min: 850,  max: 999,  color: '#f5c842', bg: 'rgba(245,200,66,0.12)',  border: 'rgba(245,200,66,0.25)'  },
+    { label: 'Satisfactorio', min: 1000, max: 1149, color: '#60a5fa', bg: 'rgba(96,165,250,0.12)',  border: 'rgba(96,165,250,0.25)'  },
+    { label: 'Destacado',     min: 1150, max: 1300, color: '#34d399', bg: 'rgba(52,211,153,0.12)',  border: 'rgba(52,211,153,0.25)'  },
+  ];
+  const zone = zones.find(z => ceneval >= z.min && ceneval <= z.max) || zones[0];
+
+  const subjectData = SUBJECTS.map(subj => {
+    const qs = questions.filter(q => q.subject === subj);
+    if (!qs.length) return null;
+    const sc = qs.filter(q => answers[q.id] === q.correct).length;
+    return {
+      subj,
+      total: qs.length,
+      correct: sc,
+      ceneval: Math.round(700 + (sc / qs.length) * 600),
+      isClinical: CLINICAL_SUBJECTS.includes(subj),
+      barPct: ((Math.round(700 + (sc / qs.length) * 600) - 700) / 600) * 100,
+    };
+  }).filter(Boolean);
+
+  return (
+    <div style={{ overflowY: 'auto', minHeight: 'calc(100vh - 4rem)', padding: '36px 24px', display: 'flex', justifyContent: 'center' }} className="scrollbar-hide">
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        style={{ width: '100%', maxWidth: 560, display: 'flex', flexDirection: 'column', gap: 20 }}
+      >
+        {/* Score hero */}
+        <div style={{ textAlign: 'center' }}>
+          <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 12, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 10 }}>
+            Reporte CENEVAL · EXANI-II
+          </p>
+          <motion.p
+            initial={{ scale: 0.75, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.2, type: 'spring', stiffness: 140, damping: 14 }}
+            style={{
+              fontFamily: 'Syne, sans-serif', fontSize: 80, fontWeight: 900,
+              lineHeight: 1, letterSpacing: '-0.04em',
+              background: `linear-gradient(135deg, white 0%, ${zone.color} 100%)`,
+              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+            }}
+          >
+            {ceneval}
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35, duration: 0.5 }}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 10, padding: '6px 16px', borderRadius: 999, background: zone.bg, border: `1px solid ${zone.border}` }}
+          >
+            <span style={{ width: 7, height: 7, borderRadius: '50%', background: zone.color, display: 'inline-block' }} />
+            <span style={{ color: zone.color, fontSize: 13, fontWeight: 600 }}>{zone.label}</span>
+          </motion.div>
+        </div>
+
+        {/* Scale bar */}
+        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl" style={{ padding: '20px 24px' }}>
+          <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 10.5, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 14 }}>
+            Posición en la escala nacional
+          </p>
+          <div style={{ position: 'relative', height: 10, borderRadius: 999, background: 'rgba(255,255,255,0.06)', marginBottom: 16 }}>
+            {/* Ghost gradient — full range */}
+            <div style={{ position: 'absolute', inset: 0, borderRadius: 999,
+              background: 'linear-gradient(90deg, #f87171 0%, #f5c842 25%, #60a5fa 66%, #34d399 100%)',
+              opacity: 0.18 }} />
+            {/* Filled bar */}
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: `${barPct}%` }}
+              transition={{ delay: 0.4, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+              style={{ position: 'absolute', left: 0, top: 0, bottom: 0, borderRadius: 999,
+                background: 'linear-gradient(90deg, #f87171 0%, #f5c842 33%, #60a5fa 66%, #34d399 100%)' }}
+            />
+            {/* Pointer dot */}
+            <motion.div
+              initial={{ left: '0%', opacity: 0 }}
+              animate={{ left: `${barPct}%`, opacity: 1 }}
+              transition={{ delay: 0.4, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+              style={{ position: 'absolute', top: '50%', transform: 'translate(-50%, -50%)',
+                width: 20, height: 20, borderRadius: '50%', background: zone.color,
+                border: '3px solid rgba(3,10,26,0.95)', boxShadow: `0 0 14px ${zone.color}90`, zIndex: 1 }}
+            />
+          </div>
+          {/* Zone labels */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 6 }}>
+            {zones.map(z => {
+              const active = z === zone;
+              return (
+                <div key={z.label} style={{ textAlign: 'center' }}>
+                  <div style={{ height: 2, borderRadius: 1, marginBottom: 7,
+                    background: active ? z.color : 'rgba(255,255,255,0.07)' }} />
+                  <p style={{ fontSize: 10.5, fontWeight: active ? 700 : 400, color: active ? z.color : 'rgba(255,255,255,0.25)', lineHeight: 1.3 }}>
+                    {z.label}
+                  </p>
+                  <p style={{ fontSize: 9, color: 'rgba(255,255,255,0.18)', marginTop: 3 }}>{z.min}–{z.max}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Quick stats */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 10 }}>
+          {[
+            { val: correct,   label: 'Correctas',     color: '#34d399' },
+            { val: incorrect, label: 'Incorrectas',   color: '#f87171' },
+            { val: unanswered, label: 'Sin responder', color: 'rgba(255,255,255,0.28)' },
+          ].map(s => (
+            <div key={s.label} style={{ padding: '14px 8px', borderRadius: 12, textAlign: 'center', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
+              <p style={{ fontFamily: 'Syne, sans-serif', fontSize: 28, fontWeight: 800, color: s.color, lineHeight: 1, marginBottom: 5 }}>{s.val}</p>
+              <p style={{ fontSize: 10.5, color: 'rgba(255,255,255,0.28)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>{s.label}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Per-subject breakdown */}
+        {subjectData.length > 0 && (
+          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl" style={{ padding: '20px 24px' }}>
+            <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 10.5, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 18 }}>
+              Desglose por área
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              {subjectData.map((s, i) => {
+                const accent = s.isClinical ? '#2dd4bf' : '#f5c842';
+                return (
+                  <motion.div
+                    key={s.subj}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.55 + i * 0.07, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 7 }}>
+                      <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.78)', fontWeight: 500 }}>{s.subj}</span>
+                      <span style={{ fontFamily: 'Syne, sans-serif', fontSize: 14, fontWeight: 700, color: accent }}>{s.ceneval}</span>
+                    </div>
+                    <div style={{ height: 5, borderRadius: 999, background: 'rgba(255,255,255,0.06)', overflow: 'hidden' }}>
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: `${s.barPct}%` }}
+                        transition={{ delay: 0.65 + i * 0.07, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                        style={{ height: '100%', borderRadius: 999, background: `linear-gradient(90deg, ${accent}44, ${accent})` }}
+                      />
+                    </div>
+                    <p style={{ fontSize: 10.5, color: 'rgba(255,255,255,0.2)', marginTop: 5 }}>
+                      {s.correct}/{s.total} correctas · {s.isClinical ? 'Área Clínica' : 'Área Transversal'}
+                    </p>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Actions */}
+        <div style={{ display: 'flex', gap: 10, justifyContent: 'center', paddingBottom: 32 }}>
+          <motion.button whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }} onClick={onRepeat} className="btn-gold" style={{ padding: '13px 28px', display: 'flex', alignItems: 'center', gap: 7 }}>
+            <RotateCcw size={14} /> Repetir
+          </motion.button>
+          <button onClick={onHome} className="btn-ghost" style={{ padding: '13px 24px', display: 'flex', alignItems: 'center', gap: 7 }}>
+            <List size={14} /> Ver simuladores
+          </button>
+        </div>
+      </motion.div>
     </div>
   );
 }
@@ -421,47 +662,13 @@ export default function ExamSimulator({ customQuizzes = [], onAddQuiz, onDeleteQ
 
   /* ── RESULTS ───────────────────────────────────── */
   if (mode === 'results') {
-    const correct   = Object.entries(answers).filter(([id, ans]) => {
-      const q = questions.find(q => q.id === parseInt(id));
-      return q && q.correct === ans;
-    }).length;
-    const score     = Math.round((correct / questions.length) * 100);
-    const unanswered = questions.length - Object.keys(answers).length;
-    const incorrect  = questions.length - correct - unanswered;
-
     return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 'calc(100vh - 4rem)', padding: 32 }}>
-        <motion.div initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl" style={{ maxWidth: 440, width: '100%', padding: '44px 40px', textAlign: 'center' }}>
-          <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 13, marginBottom: 8 }}>Simulacro completado</p>
-          <motion.p
-            initial={{ scale: 0.7, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.2, type: 'spring', stiffness: 160, damping: 14 }}
-            className="font-syne bg-gradient-to-br from-yellow-200 via-[#f5c842] to-amber-500/80 bg-clip-text text-transparent"
-            style={{ fontSize: 72, fontWeight: 900, lineHeight: 1, marginBottom: 4 }}
-          >{score}</motion.p>
-          <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 13, marginBottom: 32 }}>de 100 puntos</p>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12, marginBottom: 32 }}>
-            {[
-              { val: correct,    label: 'Correctas',     color: '#34d399' },
-              { val: incorrect,  label: 'Incorrectas',   color: '#f87171' },
-              { val: unanswered, label: 'Sin responder', color: '#f5c842' },
-            ].map(s => (
-              <div key={s.label} style={{ padding: '16px 8px', borderRadius: 12, textAlign: 'center', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
-                <p className="font-syne text-[28px] font-bold leading-none mb-1 tracking-tight" style={{ color: s.color }}>{s.val}</p>
-                <p className="stat-label">{s.label}</p>
-              </div>
-            ))}
-          </div>
-
-          <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
-            <motion.button whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }} onClick={() => startQuiz(activeQuiz)} className="btn-gold" style={{ padding: '13px 22px' }}>
-              Repetir
-            </motion.button>
-            <button onClick={resetToHome} className="btn-ghost" style={{ padding: '13px 22px' }}>Ver simuladores</button>
-          </div>
-        </motion.div>
-      </div>
+      <CenevalReport
+        questions={questions}
+        answers={answers}
+        onRepeat={() => startQuiz(activeQuiz)}
+        onHome={resetToHome}
+      />
     );
   }
 
@@ -503,7 +710,18 @@ export default function ExamSimulator({ customQuizzes = [], onAddQuiz, onDeleteQ
               </div>
 
               <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl" style={{ padding: '22px 24px', marginBottom: 20 }}>
-                <p style={{ color: 'white', fontSize: 16, lineHeight: 1.7 }}>{q.question}</p>
+                <p style={{ color: 'white', fontSize: 16, lineHeight: 1.7, marginBottom: q.image ? 16 : 0 }}>{q.question}</p>
+                {q.image && (
+                  <img
+                    src={q.image}
+                    alt="Imagen del reactivo"
+                    style={{
+                      maxWidth: '100%', maxHeight: 260, objectFit: 'contain',
+                      borderRadius: 10, border: '1px solid rgba(255,255,255,0.1)',
+                      display: 'block',
+                    }}
+                  />
+                )}
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 20 }}>

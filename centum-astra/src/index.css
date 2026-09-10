@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Inter:wght@300;400;500;600;700&family=Syne:wght@400;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Syne:wght@400;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -18,9 +18,10 @@
   body {
     background: #030a1a;
     color: #cbd5e1;
-    font-family: 'Inter', sans-serif;
-    font-size: 15px;
-    line-height: 1.6;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   }
 
   /* Subtle film-grain overlay — removes the "too clean / AI-generated" flatness.
@@ -203,7 +204,7 @@
     padding: 12px 16px;
     color: #e2e8f0;
     font-size: 14px;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     outline: none;
     transition: border-color 0.2s ease, background 0.2s ease;
   }
@@ -402,7 +403,7 @@
   padding: 11px 24px;
   font-size: 13.5px;
   font-weight: 600;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   letter-spacing: 0.02em;
   color: #f5c842;
   background: rgba(3, 10, 26, 0.8);
@@ -462,7 +463,7 @@
   color: white;
 }
 .stat-label {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.06em;
@@ -506,12 +507,12 @@
   }
 
   /* Hero headline font size */
-  .resp-hero-h1 { font-size: 36px !important; line-height: 0.95 !important; }
+  .resp-hero-h1 { font-size: 40px !important; line-height: 0.95 !important; }
 
   /* Stat grids: 4 cols → 2 cols */
   .resp-grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
 
-  /* Teacher/Forum 2-col chart grid → 1 col */
+  /* Teacher 2-col chart grid → 1 col */
   .resp-grid-2 { grid-template-columns: 1fr !important; }
 
   /* Student ring+chart grid → 1 col */
@@ -533,5 +534,5 @@
   /* Tablet: 4-col → 2-col for stat cards */
   .resp-grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
   /* Hero text slightly smaller */
-  .resp-hero-h1 { font-size: 46px !important; }
+  .resp-hero-h1 { font-size: 58px !important; }
 }

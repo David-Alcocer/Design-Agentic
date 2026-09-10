@@ -797,17 +797,15 @@ export default function PublicNav() {
       >
         {/* Logo */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{
-            width: 32, height: 32, borderRadius: 8,
-            background: 'linear-gradient(135deg, #b8880f 0%, #f5c842 100%)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 0 20px rgba(245,200,66,0.3)',
-            flexShrink: 0,
-          }}>
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-              <path d="M8 1L9.8 6.2H15.2L10.7 9.4L12.5 14.6L8 11.4L3.5 14.6L5.3 9.4L0.8 6.2H6.2L8 1Z" fill="#030a1a" />
-            </svg>
-          </div>
+          <img
+            src={`${import.meta.env.BASE_URL}logo-astra.jpeg`}
+            alt="Centum Astra"
+            style={{
+              width: 32, height: 32, borderRadius: 8,
+              objectFit: 'cover', flexShrink: 0,
+              boxShadow: '0 0 16px rgba(245,200,66,0.3)',
+            }}
+          />
           <div>
             <p style={{ fontFamily: 'Orbitron, sans-serif', fontSize: 12, fontWeight: 700, color: 'white', letterSpacing: '0.12em', lineHeight: 1.1 }}>CENTUM</p>
             <p style={{ fontFamily: 'Orbitron, sans-serif', fontSize: 9, fontWeight: 500, color: '#f5c842', letterSpacing: '0.14em', lineHeight: 1.1 }}>ASTRA</p>
